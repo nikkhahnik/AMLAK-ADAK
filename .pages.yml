@@ -1,0 +1,84 @@
+media:
+  - name: site-images
+    label: تصاویر سایت آداک
+    input: assets/uploads
+    output: /assets/uploads
+    extensions: [jpg, jpeg, png, webp, svg]
+    rename: safe
+
+content:
+  - name: pages
+    label: صفحات وب‌سایت
+    type: group
+    items:
+      - name: home
+        label: صفحه اصلی
+        type: file
+        path: index.html
+        format: code
+      - name: property
+        label: صفحه فایل ۰۱۹
+        type: file
+        path: property.html
+        format: code
+      - name: privacy
+        label: صفحه حریم خصوصی
+        type: file
+        path: privacy.html
+        format: code
+      - name: qr
+        label: صفحه QR
+        type: file
+        path: qr.html
+        format: code
+  - name: design
+    label: طراحی و ظاهر
+    type: group
+    items:
+      - name: main-styles
+        label: استایل اصلی سایت
+        type: file
+        path: styles.css
+        format: raw
+      - name: dynamic-styles
+        label: استایل بخش‌های پویا
+        type: file
+        path: dynamic.css
+        format: raw
+      - name: app-script
+        label: رفتارهای سایت
+        type: file
+        path: app.js
+        format: code
+      - name: listing-script
+        label: نمایش فایل‌های بیشتر
+        type: file
+        path: dynamic-list.js
+        format: code
+  - name: technical
+    label: تنظیمات فنی
+    type: group
+    items:
+      - name: seo-crawler
+        label: تنظیمات موتورهای جست‌وجو
+        type: file
+        path: robots.txt
+        format: raw
+      - name: netlify-headers
+        label: هدرهای امنیتی
+        type: file
+        path: _headers
+        format: raw
+      - name: netlify-config
+        label: تنظیمات انتشار و مسیرها
+        type: file
+        path: netlify.toml
+        format: raw
+
+settings:
+  commit:
+    templates:
+      create: "ADAAK: ایجاد {path}"
+      update: "ADAAK: ویرایش {path}"
+      delete: "ADAAK: حذف {path}"
+      rename: "ADAAK: تغییر نام {oldPath} به {newPath}"
