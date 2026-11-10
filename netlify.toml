@@ -1,6 +1,11 @@
 [build]
   publish = "."
 
+[build.environment]
+  # This is a static HTML site, not a Next.js app. Prevent the Next.js Runtime
+  # (installed automatically) from running and failing the build.
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"
+
 [[redirects]]
   from = "/property/019"
   to = "/property.html"
