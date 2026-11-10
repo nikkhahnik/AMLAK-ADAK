@@ -1,0 +1,12 @@
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/property/019"
+  to = "/property.html"
+  status = 301
+
+[[redirects]]
+  from = "/property/boustan-19"
+  to = "/property.html"
+  status = 301
