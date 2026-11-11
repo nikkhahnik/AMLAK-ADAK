@@ -10,7 +10,7 @@ const safeImage=value=>{
  try{const u=new URL(String(value||''),location.origin);return u.origin===location.origin?u.pathname+u.search:'/assets/adaak-symbol.png'}catch{return '/assets/adaak-symbol.png'}
 };
 const phone='09126895443',phone2='09388936259',wa='https://wa.me/989196589769';
-fetch('/properties.json',{credentials:'omit',cache:'no-store'}).then(r=>{if(!r.ok)throw Error();return r.json()}).then(rows=>{
+fetch('/properties.json',{credentials:'omit',cache:'no-store'}).then(r=>{if(!r.ok)throw Error();return r.text().then(raw=>JSON.parse(raw.trim()||'[]'))}).then(rows=>{
  const p=Array.isArray(rows)?rows.find(x=>x&&x.slug===slug&&x.is_published===true):null;
  if(!p){main.innerHTML='<div class="wrap" style="padding:90px 0;text-align:center"><h1>این فایل در حال حاضر در دسترس نیست.</h1><p>برای مشاهده فایل‌های منتشرشده به صفحه اصلی آداک بازگردید.</p><a class="btn btn-navy" href="/">بازگشت به صفحه اصلی</a></div>';return;}
  const title=p.title||'فایل ملکی آداک';
