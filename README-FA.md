@@ -1,7 +1,7 @@
 # وب‌سایت املاک آداک
 
 ## انتشار
-سایت روی Netlify میزبانی می‌شود. دامنه اصلی تنظیم‌شده در پروژه: `amlakadak.life` و نشانی جایگزین Netlify: `amlakadak.netlify.app`.
+سایت روی Netlify میزبانی می‌شود. دامنه اصلی: `amlakadak.ir` (ثبت‌شده در ایرنیک، با `www.amlakadak.ir` که به دامنه اصلی هدایت می‌شود) و نشانی جایگزین Netlify: `amlakadak.netlify.app`.
 
 برای انتشار خودکار و فعال شدن پنل مدیریت، پروژه Netlify باید به مخزن GitHub زیر متصل باشد:
 `nikkhahnik/AMLAK-ADAK` — شاخه `main`.

@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /qr.html
-# Add Sitemap after public domain is confirmed with finalize_seo.py
-
+Disallow: /admin/
+Disallow: /admin.html
+Sitemap: https://amlakadak.ir/sitemap.xml
