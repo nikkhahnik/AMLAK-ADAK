@@ -16,13 +16,13 @@ content:
         type: file
         path: index.html
         format: code
-      - name: property
-        label: صفحه فایل ۰۱۹
+      - name: property-template
+        label: قالب صفحه ملک
         type: file
         path: property.html
         format: code
       - name: privacy
-        label: صفحه حریم خصوصی
+        label: حریم خصوصی
         type: file
         path: privacy.html
         format: code
@@ -31,30 +31,95 @@ content:
         type: file
         path: qr.html
         format: code
+
+  - name: property-catalog
+    label: فایل‌های ملکی
+    type: file
+    path: properties.json
+    format: json
+    list: true
+    fields:
+      - name: slug
+        label: شناسه انگلیسی فایل
+        type: string
+      - name: title
+        label: عنوان فایل
+        type: string
+      - name: summary
+        label: معرفی کوتاه
+        type: text
+      - name: category
+        label: نوع ملک
+        type: select
+        options:
+          values:
+            - label: آپارتمان
+              value: apartment
+            - label: ویلایی
+              value: villa
+            - label: زمین
+              value: land
+            - label: تجاری
+              value: commercial
+      - name: area_m2
+        label: متراژ
+        type: number
+      - name: bedrooms
+        label: تعداد اتاق خواب
+        type: number
+      - name: city
+        label: شهر
+        type: string
+      - name: public_area
+        label: محدوده عمومی
+        type: string
+      - name: cover
+        label: تصویر اصلی
+        type: image
+      - name: gallery
+        label: تصاویر گالری
+        type: image
+        list: true
+      - name: is_published
+        label: انتشار در سایت
+        type: boolean
+      - name: seo_title
+        label: عنوان سئو
+        type: string
+      - name: seo_description
+        label: توضیحات سئو
+        type: text
+
   - name: design
-    label: طراحی و ظاهر
+    label: ظاهر و رفتار سایت
     type: group
     items:
       - name: main-styles
-        label: استایل اصلی سایت
+        label: استایل اصلی
         type: file
         path: styles.css
         format: raw
       - name: dynamic-styles
-        label: استایل بخش‌های پویا
+        label: استایل فایل‌های بیشتر
         type: file
         path: dynamic.css
         format: raw
       - name: app-script
-        label: رفتارهای سایت
+        label: رفتارهای عمومی سایت
         type: file
         path: app.js
         format: code
       - name: listing-script
-        label: نمایش فایل‌های بیشتر
+        label: نمایش فایل‌های ملکی
         type: file
         path: dynamic-list.js
         format: code
+      - name: property-script
+        label: نمایش صفحه اختصاصی ملک
+        type: file
+        path: property-page.js
+        format: code
+
   - name: technical
     label: تنظیمات فنی
     type: group
@@ -64,19 +129,25 @@ content:
         type: file
         path: robots.txt
         format: raw
-      - name: netlify-headers
+      - name: security-headers
         label: هدرهای امنیتی
         type: file
         path: _headers
         format: raw
-      - name: netlify-config
-        label: تنظیمات انتشار و مسیرها
+      - name: deploy-config
+        label: مسیرها و انتشار
         type: file
         path: netlify.toml
-        format: raw
+        format: code
+      - name: admin-page
+        label: صفحه ورود مدیریت
+        type: file
+        path: admin/index.html
+        format: code
 
 settings:
   commit:
+    identity: app
     templates:
       create: "ADAAK: ایجاد {path}"
       update: "ADAAK: ویرایش {path}"
