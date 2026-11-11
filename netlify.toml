@@ -15,3 +15,8 @@
   from = "/property/boustan-19"
   to = "/property.html"
   status = 301
+
+[[redirects]]
+  from = "/p/*"
+  to = "/property.html?slug=:splat"
+  status = 200
