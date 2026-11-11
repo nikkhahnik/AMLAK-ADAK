@@ -14,7 +14,7 @@ const make=(tag,cls,text)=>{
   return el;
 };
 fetch('/properties.json',{credentials:'omit',cache:'no-store'})
- .then(r=>{if(!r.ok)throw Error('catalog unavailable');return r.json()})
+ .then(r=>{if(!r.ok)throw Error('catalog unavailable');return r.text().then(raw=>JSON.parse(raw.trim()||'[]'))})
  .then(rows=>{
   const items=Array.isArray(rows)?rows.filter(x=>x&&x.is_published===true&&x.slug&&/^[a-z0-9][a-z0-9-]{2,63}$/.test(x.slug)): [];
   wrap.replaceChildren();
