@@ -1,11 +1,60 @@
 (()=>{'use strict';
-const wrap=document.querySelector('#more-properties'),counter=document.querySelector('#public-count');if(!wrap)return;
-fetch('/api/properties',{credentials:'omit'}).then(r=>{if(!r.ok)throw Error('bad response');return r.json()}).then(items=>{
- if(counter)counter.textContent=`${items.length.toLocaleString('fa-IR')} فایل در سایت`;
- items.filter(x=>x.slug!=='adk-019').forEach(p=>{const card=document.createElement('article');card.className='dynamic-property-card';card.dataset.search=[p.title,p.summary,p.category,p.city,p.public_area].join(' ').toLowerCase();card.dataset.category=p.category;
- const img=document.createElement('img');img.src=p.cover||'/assets/adaak-symbol.png';img.loading='lazy';img.alt=p.title;
- const content=document.createElement('div');content.className='dynamic-property-content';const h=document.createElement('h3');h.textContent=p.title;const summary=document.createElement('p');summary.textContent=p.summary.slice(0,180)+(p.summary.length>180?'…':'');const meta=document.createElement('p');meta.textContent=[p.area_m2?`${p.area_m2} متر`:'',p.bedrooms!==null?`${p.bedrooms} خواب`:'',p.city].filter(Boolean).join(' · ');const a=document.createElement('a');a.textContent='مشاهده گالری و درخواست بازدید';a.href='/p/'+encodeURIComponent(p.slug);
- content.append(h,summary,meta,a);card.append(img,content);wrap.append(card)})
- window.dispatchEvent(new Event('adak-list-ready'));
- }).catch(()=>{if(counter)counter.textContent='نمایش فایل‌های ذخیره‌شده'});
+const wrap=document.querySelector('#more-properties');
+const counter=document.querySelector('#public-count');
+if(!wrap)return;
+const first=document.querySelector('#first-property');
+const safeImage=value=>{
+  if(!value)return '/assets/adaak-symbol.png';
+  try{const u=new URL(value,location.origin);return u.origin===location.origin?u.pathname+u.search:'/assets/adaak-symbol.png'}catch{return '/assets/adaak-symbol.png'}
+};
+const make=(tag,cls,text)=>{
+  const el=document.createElement(tag);
+  if(cls)el.className=cls;
+  if(text!==undefined)el.textContent=String(text);
+  return el;
+};
+fetch('/properties.json',{credentials:'omit',cache:'no-store'})
+ .then(r=>{if(!r.ok)throw Error('catalog unavailable');return r.json()})
+ .then(rows=>{
+  const items=Array.isArray(rows)?rows.filter(x=>x&&x.is_published===true&&x.slug&&/^[a-z0-9][a-z0-9-]{2,63}$/.test(x.slug)): [];
+  wrap.replaceChildren();
+  items.filter(x=>x.slug!=='adk-019').forEach(p=>{
+    const card=make('article','dynamic-property-card');
+    card.dataset.category=p.category||'apartment';
+    card.dataset.search=[p.title,p.summary,p.category,p.city,p.public_area,p.area_m2,p.bedrooms].filter(Boolean).join(' ').toLowerCase();
+    const link=make('a','dynamic-property-image');
+    link.href='/p/'+encodeURIComponent(p.slug);
+    const img=make('img');
+    img.src=safeImage(p.cover);
+    img.alt=p.title||'فایل ملکی املاک آداک';
+    img.loading='lazy';
+    link.append(img);
+    const content=make('div','dynamic-property-content');
+    const eyebrow=make('span','listing-number','ADAAK SELECTED PROPERTY');
+    const h=make('h3','',p.title||'فایل ملکی آداک');
+    const summary=make('p','',p.summary||'برای دریافت اطلاعات تکمیلی و هماهنگی بازدید با مشاوران آداک تماس بگیرید.');
+    const meta=make('p','',[
+      p.area_m2?String(p.area_m2)+' متر':'',
+      p.bedrooms!==null&&p.bedrooms!==undefined?String(p.bedrooms)+' خواب':'',
+      p.public_area||p.city||'کرج'
+    ].filter(Boolean).join(' · '));
+    const actions=make('div','feature-actions');
+    const view=make('a','btn btn-navy','مشاهده فایل و گالری');
+    view.href='/p/'+encodeURIComponent(p.slug);
+    const msg='سلام، برای فایل '+(p.title||p.slug)+' درخواست اطلاعات و بازدید دارم.';
+    const wa=make('a','btn btn-outline','واتساپ');
+    wa.href='https://wa.me/989196589769?text='+encodeURIComponent(msg);
+    wa.target='_blank';wa.rel='noopener noreferrer';
+    actions.append(view,wa);
+    content.append(eyebrow,h,summary,meta,actions);
+    card.append(link,content);
+    wrap.append(card);
+  });
+  if(counter)counter.textContent=((first?1:0)+items.filter(x=>x.slug!=='adk-019').length).toLocaleString('fa-IR')+' فایل در سایت';
+  window.dispatchEvent(new Event('adak-list-ready'));
+ })
+ .catch(()=>{
+   if(counter&&first)counter.textContent='۱ فایل در سایت';
+   window.dispatchEvent(new Event('adak-list-ready'));
+ });
 })();
