@@ -53,14 +53,14 @@ content:
         type: select
         options:
           values:
-            - label: آپارتمان
-              value: apartment
-            - label: ویلایی
-              value: villa
-            - label: زمین
-              value: land
-            - label: تجاری
-              value: commercial
+            - name: apartment
+              label: آپارتمان
+            - name: villa
+              label: ویلایی
+            - name: land
+              label: زمین
+            - name: commercial
+              label: تجاری
       - name: area_m2
         label: متراژ
         type: number
