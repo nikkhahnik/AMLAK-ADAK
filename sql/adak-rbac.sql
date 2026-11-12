@@ -3,7 +3,7 @@
 -- This migration intentionally does NOT create an owner or public credentials.
 create schema if not exists adak_private;
 revoke all on schema adak_private from public, anon;
-grant usage on schema adak_private to authenticated;
+grant usage on schema adak_private to authenticated, anon;
 
 alter table public.adak_staff
   add column if not exists is_owner boolean not null default false,
@@ -20,7 +20,7 @@ as $$
  );
 $$;
 revoke all on function adak_private.has_access(text) from public,anon;
-grant execute on function adak_private.has_access(text) to authenticated;
+grant execute on function adak_private.has_access(text) to authenticated,anon;
 
 create or replace function adak_private.is_owner() returns boolean
 language sql stable security definer set search_path = ''
@@ -39,10 +39,10 @@ create or replace function adak_private.staff_guard() returns trigger
 language plpgsql security invoker set search_path = ''
 as $$
 begin
- if tg_op='INSERT' and new.is_owner then
+ if tg_op='INSERT' and new.is_owner and current_user <> 'postgres' then
     raise exception 'Owner accounts must be bootstrapped by trusted database administration';
  end if;
- if tg_op='UPDATE' and
+ if tg_op='UPDATE' and current_user <> 'postgres' and
    (new.user_id is distinct from old.user_id or new.is_owner is distinct from old.is_owner) then
     raise exception 'Owner identity cannot be edited through the API';
  end if;
