@@ -30,14 +30,14 @@ fetch('/properties.json',{credentials:'omit',cache:'no-store'})
     img.loading='lazy';
     link.append(img);
     const content=make('div','dynamic-property-content');
-    const eyebrow=make('span','listing-number','ADAAK SELECTED PROPERTY');
+    const eyebrow=make('span','listing-number',p.slug.toUpperCase());
     const h=make('h3','',p.title||'فایل ملکی آداک');
     const summary=make('p','',p.summary||'برای دریافت اطلاعات تکمیلی و هماهنگی بازدید با مشاوران آداک تماس بگیرید.');
     const meta=make('p','',[
       p.area_m2?String(p.area_m2)+' متر':'',
       p.bedrooms!==null&&p.bedrooms!==undefined?String(p.bedrooms)+' خواب':'',
       p.public_area||p.city||'کرج'
-    ].filter(Boolean).join(' · '));
+    ].filter(Boolean).join('، '));
     const actions=make('div','feature-actions');
     const view=make('a','btn btn-navy','مشاهده فایل و گالری');
     view.href='/p/'+encodeURIComponent(p.slug);

@@ -99,11 +99,6 @@ content:
         type: file
         path: styles.css
         format: raw
-      - name: dynamic-styles
-        label: استایل فایل‌های بیشتر
-        type: file
-        path: dynamic.css
-        format: raw
       - name: app-script
         label: رفتارهای عمومی سایت
         type: file
