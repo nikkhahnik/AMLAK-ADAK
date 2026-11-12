@@ -372,3 +372,7 @@ h1,h2,h3{text-wrap:balance}
 @media(max-width:520px){.tour-viewer-wrap .tour-viewer{height:75vw;min-height:260px}.tour-thumbs{grid-template-columns:repeat(2,1fr)}}
 .icon-button.tour-button{background:var(--ember);border-color:var(--ember);color:#fff}
 .icon-button.tour-button:hover{background:var(--ember-ink);border-color:var(--ember-ink)}
+.tour-angles{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px;font-size:14px;color:var(--muted)}
+.tour-angles[hidden]{display:none}
+.tour-angles button{border:1.5px solid var(--line);background:#fff;color:var(--ink);border-radius:var(--r-sm);padding:6px 12px;font-size:14px;font-weight:500}
+.tour-angles button[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}

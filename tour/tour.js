@@ -25,14 +25,24 @@ const viewer=window.pannellum.viewer(el,{
 const ids=data.map(s=>s.id);
 const caption=document.getElementById('tour-caption');
 const thumbs=[...document.querySelectorAll('.tour-thumb')];
+const groupOf=s=>s.group||s.id;
+const stops=[...new Set(data.map(groupOf))];
+const anglesBox=document.getElementById('tour-angles');
 const sync=id=>{
   const i=ids.indexOf(id); if(i<0)return;
-  if(caption)caption.textContent=data[i].title+'، فضای '+(i+1).toLocaleString('fa-IR')+' از '+ids.length.toLocaleString('fa-IR');
-  thumbs.forEach(t=>t.setAttribute('aria-pressed',String(t.dataset.scene===id)));
+  const s=data[i], g=groupOf(s), stop=stops.indexOf(g);
+  if(caption)caption.textContent=s.title+'، فضای '+(stop+1).toLocaleString('fa-IR')+' از '+stops.length.toLocaleString('fa-IR');
+  thumbs.forEach(t=>{const ts=data[ids.indexOf(t.dataset.scene)];t.setAttribute('aria-pressed',String(!!ts&&groupOf(ts)===g));});
+  if(anglesBox){
+    const members=data.filter(x=>groupOf(x)===g);
+    anglesBox.querySelectorAll('button').forEach(b=>b.remove());
+    anglesBox.hidden=members.length<2;
+    members.forEach(m=>{const b=document.createElement('button');b.type='button';b.textContent=m.angle||m.title;b.setAttribute('aria-pressed',String(m.id===id));b.addEventListener('click',()=>go(m.id));anglesBox.append(b);});
+  }
   history.replaceState(null,'','#'+id);
 };
 const go=id=>{if(scenes[id]&&viewer.getScene()!==id)viewer.loadScene(id)};
-const step=n=>{const i=ids.indexOf(viewer.getScene());go(ids[(i+n+ids.length)%ids.length])};
+const step=n=>{const cur=data[ids.indexOf(viewer.getScene())];const k=stops.indexOf(groupOf(cur));const g=stops[(k+n+stops.length)%stops.length];go(data.find(x=>groupOf(x)===g).id)};
 const byId=Object.fromEntries(data.map(s=>[s.id,s]));
 const fit=()=>{
   const s=byId[viewer.getScene()]; if(!s)return;

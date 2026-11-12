@@ -41,33 +41,39 @@ window.ADAAK_TOUR=[
  },
  {
   "id": "bedroom-1",
-  "title": "اتاق خواب ۱",
+  "title": "اتاق خواب",
   "src": "/assets/tour/150/bedroom-1.jpg",
   "thumb": "/assets/tour/150/bedroom-1-thumb.jpg",
   "haov": 162.4,
   "vaov": 60,
   "w": 1280,
-  "h": 473
+  "h": 473,
+  "group": "bedroom",
+  "angle": "نمای اصلی"
  },
  {
   "id": "bedroom-2",
-  "title": "اتاق خواب ۲",
+  "title": "اتاق خواب",
   "src": "/assets/tour/150/bedroom-2.jpg",
   "thumb": "/assets/tour/150/bedroom-2-thumb.jpg",
   "haov": 224.6,
   "vaov": 60,
   "w": 1280,
-  "h": 342
+  "h": 342,
+  "group": "bedroom",
+  "angle": "سمت پنجره"
  },
  {
   "id": "bedroom-3",
-  "title": "اتاق خواب ۳",
+  "title": "اتاق خواب",
   "src": "/assets/tour/150/bedroom-3.jpg",
   "thumb": "/assets/tour/150/bedroom-3-thumb.jpg",
   "haov": 220.8,
   "vaov": 60,
   "w": 1774,
-  "h": 482
+  "h": 482,
+  "group": "bedroom",
+  "angle": "زاویهٔ دیگر"
  },
  {
   "id": "corridor",
