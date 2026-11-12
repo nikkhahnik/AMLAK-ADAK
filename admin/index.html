@@ -26,7 +26,7 @@
   <div><div class="eyebrow">پنل مدیریت محتوای املاک آداک</div><h1 id="view-title">داشبورد مدیریت</h1><p class="sub" id="view-desc">نمای کلی فایل‌های ملکی و دسترسی سریع به امور روزانه</p></div>
   <div class="actions"><a class="button" href="/" target="_blank" rel="noopener">مشاهده سایت ↗</a><a class="button primary" href="https://app.pagescms.org/" target="_blank" rel="noopener noreferrer">ورود امن برای ویرایش ↗</a></div>
  </header>
- <div class="notice" role="note">این صفحه پیش‌نمایش عمومی اطلاعات منتشرشده است. <strong>ثبت، ویرایش، حذف و بارگذاری</strong> در Pages CMS، پس از ورود با GitHub انجام می‌شود. برای امنیت، رمز یا توکن GitHub را اینجا وارد نکنید.</div>
+ <div class="notice" role="note">سطح‌بندی کاربران پس از راه‌اندازی پایگاه داده آداک فعال می‌شود. این صفحه پیش‌نمایش عمومی اطلاعات منتشرشده است. <strong>ثبت، ویرایش، حذف و بارگذاری</strong> در Pages CMS، پس از ورود با GitHub انجام می‌شود. برای امنیت، رمز یا توکن GitHub را اینجا وارد نکنید.</div>
  <section id="overview" class="view">
   <div class="metrics">
    <div class="metric"><small>کل فایل‌های کاتالوگ</small><b id="count-all">…</b><strong>فایل ملکی</strong></div>
@@ -37,8 +37,8 @@
   <div class="quick-grid">
    <a href="https://app.pagescms.org/" target="_blank" rel="noopener noreferrer" class="quick"><div class="ico">＋</div><div style="flex:1"><strong>ثبت فایل ملکی جدید</strong><small>مشخصات عمومی، تصویر و وضعیت انتشار</small></div><span class="arrow">←</span></a>
    <button class="quick" data-go="properties"><div class="ico">⌂</div><div style="flex:1"><strong>فهرست و جست‌وجوی املاک</strong><small>جست‌وجو با نام، کد و محدوده</small></div><span class="arrow">←</span></button>
-   <button class="quick" data-go="media"><div class="ico">▧</div><div style="flex:1"><strong>آپلود و مدیریت تصاویر</strong><small>افزودن تصویر و گالری فایل‌های ملکی</small></div><span class="arrow">←</span></button>
-   <button class="quick" data-go="pages"><div class="ico">▤</div><div style="flex:1"><strong>ویرایش محتوای سایت</strong><small>صفحه اصلی، معرفی دفتر و محتوای عمومی</small></div><span class="arrow">←</span></button>
+   <a class="quick" href="/admin/upload.html"><div class="ico">▧</div><div style="flex:1"><strong>آپلود عکس با امکان لغو</strong><small>بارگذاری خصوصی توسط همکار مجاز</small></div><span class="arrow">←</span></a>
+   <button class="quick" data-go="pages"><div class="ico">▤</div><div style="flex:1"><strong>ویرایش محتوای سایت</strong><small>صفحه اصلی، معرفی دفتر و محتوای عمومی</small></div><span class="arrow">←</span></button><a class="quick" href="/admin/access.html"><div class="ico">⚿</div><div style="flex:1"><strong>مدیران و سطح دسترسی</strong><small>اختصاص مجوز برای هر حساب توسط مالک</small></div><span class="arrow">←</span></a>
   </div>
   <p class="privacy">اطلاعات مالک، شماره شخصی، قیمت داخلی و نشانی دقیق ملک نباید در کاتالوگ عمومی و مخزن GitHub ثبت شود.</p>
  </section>
