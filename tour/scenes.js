@@ -1,13 +1,44 @@
 window.ADAAK_TOUR=[
  {
-  "id": "living",
-  "title": "پذیرایی و آشپزخانه",
-  "src": "/assets/tour/150/living.jpg",
-  "thumb": "/assets/tour/150/living-thumb.jpg",
-  "haov": 211.0,
+  "id": "yard",
+  "title": "محوطهٔ ساختمان",
+  "src": "/assets/tour/150/yard-360.jpg",
+  "thumb": "/assets/tour/150/yard-360-thumb.jpg",
+  "full": true
+ },
+ {
+  "id": "lobby",
+  "title": "لابی ساختمان",
+  "src": "/assets/tour/150/lobby-360.jpg",
+  "thumb": "/assets/tour/150/lobby-360-thumb.jpg",
+  "full": true
+ },
+ {
+  "id": "lobby-seating",
+  "title": "لابی، فضای نشیمن",
+  "src": "/assets/tour/150/lobby-seating.jpg",
+  "thumb": "/assets/tour/150/lobby-seating-thumb.jpg",
+  "haov": 223.3,
   "vaov": 60,
   "w": 1280,
-  "h": 364
+  "h": 344
+ },
+ {
+  "id": "corridor",
+  "title": "راهروی طبقه و درِ ورودی",
+  "src": "/assets/tour/150/corridor.jpg",
+  "thumb": "/assets/tour/150/corridor-thumb.jpg",
+  "haov": 215.1,
+  "vaov": 60,
+  "w": 1280,
+  "h": 357
+ },
+ {
+  "id": "living",
+  "title": "پذیرایی و آشپزخانه",
+  "src": "/assets/tour/150/living-360.jpg",
+  "thumb": "/assets/tour/150/living-360-thumb.jpg",
+  "full": true
  },
  {
   "id": "living-window",
@@ -32,24 +63,18 @@ window.ADAAK_TOUR=[
  {
   "id": "balcony",
   "title": "بالکن",
-  "src": "/assets/tour/150/balcony.jpg",
-  "thumb": "/assets/tour/150/balcony-thumb.jpg",
-  "haov": 206.3,
-  "vaov": 60,
-  "w": 1774,
-  "h": 516
+  "src": "/assets/tour/150/balcony-360.jpg",
+  "thumb": "/assets/tour/150/balcony-360-thumb.jpg",
+  "full": true
  },
  {
-  "id": "bedroom-1",
+  "id": "bedroom",
   "title": "اتاق خواب",
-  "src": "/assets/tour/150/bedroom-1.jpg",
-  "thumb": "/assets/tour/150/bedroom-1-thumb.jpg",
-  "haov": 162.4,
-  "vaov": 60,
-  "w": 1280,
-  "h": 473,
+  "src": "/assets/tour/150/bedroom-360.jpg",
+  "thumb": "/assets/tour/150/bedroom-360-thumb.jpg",
+  "full": true,
   "group": "bedroom",
-  "angle": "نمای اصلی"
+  "angle": "نمای ۳۶۰"
  },
  {
   "id": "bedroom-2",
@@ -74,35 +99,5 @@ window.ADAAK_TOUR=[
   "h": 482,
   "group": "bedroom",
   "angle": "زاویهٔ دیگر"
- },
- {
-  "id": "corridor",
-  "title": "راهروی طبقه و درِ ورودی",
-  "src": "/assets/tour/150/corridor.jpg",
-  "thumb": "/assets/tour/150/corridor-thumb.jpg",
-  "haov": 215.1,
-  "vaov": 60,
-  "w": 1280,
-  "h": 357
- },
- {
-  "id": "lobby",
-  "title": "لابی ساختمان",
-  "src": "/assets/tour/150/lobby.jpg",
-  "thumb": "/assets/tour/150/lobby-thumb.jpg",
-  "haov": 180.0,
-  "vaov": 90,
-  "w": 1280,
-  "h": 640
- },
- {
-  "id": "lobby-seating",
-  "title": "لابی، فضای نشیمن",
-  "src": "/assets/tour/150/lobby-seating.jpg",
-  "thumb": "/assets/tour/150/lobby-seating-thumb.jpg",
-  "haov": 223.3,
-  "vaov": 60,
-  "w": 1280,
-  "h": 344
  }
 ];

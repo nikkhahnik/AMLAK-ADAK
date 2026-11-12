@@ -3,15 +3,19 @@ const data=window.ADAAK_TOUR||[];
 const el=document.getElementById('tour-viewer');
 if(!el||!data.length||typeof window.pannellum==='undefined')return;
 const links={
-  living:[{pitch:0,yaw:-51,type:'scene',text:'بالکن',sceneId:'balcony'}],
-  balcony:[{pitch:0,yaw:-85,type:'scene',text:'بازگشت به پذیرایی',sceneId:'living'}]
+  yard:[{pitch:-2,yaw:39,type:'scene',text:'ورود به لابی',sceneId:'lobby'}],
+  lobby:[{pitch:-4,yaw:-150,type:'scene',text:'محوطهٔ ساختمان',sceneId:'yard'}],
+  living:[{pitch:-8,yaw:-95,type:'scene',text:'بالکن',sceneId:'balcony'},{pitch:-3,yaw:110,type:'scene',text:'اتاق خواب',sceneId:'bedroom'}],
+  balcony:[{pitch:-6,yaw:-150,type:'scene',text:'بازگشت به پذیرایی',sceneId:'living'}],
+  bedroom:[{pitch:-4,yaw:-37,type:'scene',text:'پذیرایی',sceneId:'living'}]
 };
-const startYaw={living:-40};
+const startYaw={yard:30,living:35};
 const scenes={};
 data.forEach(s=>{
-  scenes[s.id]={type:'equirectangular',panorama:s.src,haov:s.haov,vaov:s.vaov,vOffset:0,
-    yaw:(startYaw[s.id]||0),pitch:0,hfov:Math.min(100,s.haov*0.8),minHfov:35,maxHfov:Math.min(110,s.haov),
-    minPitch:-s.vaov/2,maxPitch:s.vaov/2,minYaw:-s.haov/2,maxYaw:s.haov/2,avoidShowingBackground:true,hotSpots:links[s.id]||[]};
+  const base={type:'equirectangular',panorama:s.src,yaw:(startYaw[s.id]||0),pitch:0,avoidShowingBackground:true,hotSpots:links[s.id]||[]};
+  if(s.full){s.haov=360;s.vaov=180;scenes[s.id]={...base,hfov:100,minHfov:50,maxHfov:110,minPitch:-90,maxPitch:90};return;}
+  scenes[s.id]={...base,haov:s.haov,vaov:s.vaov,vOffset:0,hfov:Math.min(100,s.haov*0.8),minHfov:35,maxHfov:Math.min(110,s.haov),
+    minPitch:-s.vaov/2,maxPitch:s.vaov/2,minYaw:-s.haov/2,maxYaw:s.haov/2};
 });
 const fromHash=decodeURIComponent(location.hash.slice(1));
 const first=scenes[fromHash]?fromHash:data[0].id;
@@ -47,6 +51,7 @@ const byId=Object.fromEntries(data.map(s=>[s.id,s]));
 const fit=()=>{
   const s=byId[viewer.getScene()]; if(!s)return;
   const box=viewer.getContainer(); const a=box.clientWidth/Math.max(1,box.clientHeight);
+  if(s.full){viewer.setHfovBounds([50,a<1?120:110]);return;}
   const r=Math.PI/180, maxH=Math.min(s.haov,110,2*Math.atan(Math.tan(s.vaov/2*r)*a)/r*0.97);
   viewer.setHfovBounds([Math.min(25,maxH),maxH]);
   if(viewer.getHfov()>maxH||isNaN(viewer.getHfov()))viewer.setHfov(maxH,false);
