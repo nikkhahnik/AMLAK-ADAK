@@ -1,1 +1,21 @@
-[]
+[
+  {
+    "slug": "adk-02",
+    "title": "کد ۰۲",
+    "summary": "معرفی کوتاه این فایل به‌زودی تکمیل می‌شود. برای اطلاعات تکمیلی و هماهنگی بازدید با مشاوران آداک تماس بگیرید.",
+    "category": null,
+    "area_m2": null,
+    "bedrooms": null,
+    "city": "کرج",
+    "public_area": null,
+    "cover": "/assets/uploads/adk-02-01.jpg",
+    "gallery": [
+      "/assets/uploads/adk-02-02.jpg",
+      "/assets/uploads/adk-02-03.jpg",
+      "/assets/uploads/adk-02-04.jpg"
+    ],
+    "is_published": true,
+    "seo_title": "کد ۰۲ | املاک آداک",
+    "seo_description": "تصاویر فایل کد ۰۲ املاک آداک در کرج. برای اطلاعات تکمیلی با مشاوران آداک تماس بگیرید."
+  }
+]
