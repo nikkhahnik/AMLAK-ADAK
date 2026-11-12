@@ -27,7 +27,7 @@ const caption=document.getElementById('tour-caption');
 const thumbs=[...document.querySelectorAll('.tour-thumb')];
 const sync=id=>{
   const i=ids.indexOf(id); if(i<0)return;
-  if(caption)caption.textContent=data[i].title+' · '+(i+1).toLocaleString('fa-IR')+' از '+ids.length.toLocaleString('fa-IR');
+  if(caption)caption.textContent=data[i].title+'، فضای '+(i+1).toLocaleString('fa-IR')+' از '+ids.length.toLocaleString('fa-IR');
   thumbs.forEach(t=>t.setAttribute('aria-pressed',String(t.dataset.scene===id)));
   history.replaceState(null,'','#'+id);
 };
