@@ -78,5 +78,25 @@ window.ADAAK_TOUR=[
   "vaov": 60,
   "w": 1280,
   "h": 357
+ },
+ {
+  "id": "lobby",
+  "title": "لابی ساختمان",
+  "src": "/assets/tour/150/lobby.jpg",
+  "thumb": "/assets/tour/150/lobby-thumb.jpg",
+  "haov": 180.0,
+  "vaov": 90,
+  "w": 1280,
+  "h": 640
+ },
+ {
+  "id": "lobby-seating",
+  "title": "لابی، فضای نشیمن",
+  "src": "/assets/tour/150/lobby-seating.jpg",
+  "thumb": "/assets/tour/150/lobby-seating-thumb.jpg",
+  "haov": 223.3,
+  "vaov": 60,
+  "w": 1280,
+  "h": 344
  }
 ];
