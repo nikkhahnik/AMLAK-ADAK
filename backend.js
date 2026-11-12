@@ -63,9 +63,9 @@
     if(!signed)throw Error('نشانی عکس در دسترس نیست');
     return signed.startsWith('https://')?signed:url+'/storage/v1'+(signed.startsWith('/')?signed:'/'+signed);
   }
-  async function uploadPhoto(path,blob){
+  async function uploadPhoto(path,blob,signal){
     if(!token) throw Error('برای بارگذاری وارد پنل شوید.');
-    return request('/storage/v1/object/adak-media/'+encodeStoragePath(path),{method:'POST',json:false,headers:{'Content-Type':'image/webp','x-upsert':'false'},body:blob});
+    return request('/storage/v1/object/adak-media/'+encodeStoragePath(path),{method:'POST',json:false,headers:{'Content-Type':'image/webp','x-upsert':'false'},body:blob,signal});
   }
   async function removePhoto(path){
     if(!token)throw Error('دسترسی بارگذاری ندارید');
