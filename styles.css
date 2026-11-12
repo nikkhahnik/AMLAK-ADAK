@@ -370,3 +370,5 @@ h1,h2,h3{text-wrap:balance}
 .tour-viewer .pnlm-tooltip span{font-family:var(--body);direction:rtl}
 .tour-viewer .pnlm-load-box p,.tour-viewer .pnlm-info-box{font-family:var(--body)}
 @media(max-width:520px){.tour-viewer-wrap .tour-viewer{height:75vw;min-height:260px}.tour-thumbs{grid-template-columns:repeat(2,1fr)}}
+.icon-button.tour-button{background:var(--ember);border-color:var(--ember);color:#fff}
+.icon-button.tour-button:hover{background:var(--ember-ink);border-color:var(--ember-ink)}

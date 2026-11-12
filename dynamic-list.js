@@ -45,7 +45,13 @@ fetch('/properties.json',{credentials:'omit',cache:'no-store'})
     const wa=make('a','btn btn-outline','واتساپ');
     wa.href='https://wa.me/989196589769?text='+encodeURIComponent(msg);
     wa.target='_blank';wa.rel='noopener noreferrer';
-    actions.append(view,wa);
+    actions.append(view);
+    if(p.tour_url&&/^\/[a-z0-9/_-]*$/i.test(p.tour_url)){
+      const tour=make('a','btn btn-gold','تور ۳۶۰');
+      tour.href=p.tour_url;
+      actions.append(tour);
+    }
+    actions.append(wa);
     content.append(eyebrow,h,summary,meta,actions);
     card.append(link,content);
     wrap.append(card);
