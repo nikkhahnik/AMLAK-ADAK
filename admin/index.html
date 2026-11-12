@@ -1,47 +1,151 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="robots" content="noindex,nofollow">
-  <meta name="theme-color" content="#101f31">
-  <title>مدیریت وب‌سایت | املاک آداک</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>پنل ادمین - AMLAK ADAK</title>
   <style>
-    :root{color-scheme:light;--navy:#102235;--gold:#b79a68;--line:#e6e8e9}
-    *{box-sizing:border-box}body{margin:0;background:#f7f6f2;color:var(--navy);font-family:Tahoma,Arial,sans-serif;line-height:1.9}
-    main{width:min(760px,calc(100% - 32px));margin:8vh auto;background:white;border:1px solid var(--line);border-radius:18px;padding:clamp(22px,5vw,44px);box-shadow:0 20px 70px #10223510}
-    .brand{display:flex;align-items:center;gap:14px;margin-bottom:30px}.brand img{width:58px;height:58px;object-fit:contain}
-    .brand strong{font-size:19px}.brand small{display:block;font-size:10px;letter-spacing:2px;color:#7b8790;direction:ltr}
-    .eyebrow{color:var(--gold);font-size:11px;letter-spacing:2px}h1{font-size:clamp(25px,5vw,34px);line-height:1.5;margin:8px 0 12px}
-    p{color:#596774;font-size:14px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin:28px 0}
-    a.button{display:inline-flex;align-items:center;justify-content:center;padding:12px 20px;border-radius:9px;text-decoration:none;font-size:14px;font-weight:bold}
-    .primary{background:var(--navy);color:#fff}.secondary{border:1px solid #cdd4d9;color:var(--navy)}
-    .note{padding:16px 18px;border-right:3px solid var(--gold);background:#faf8f3;border-radius:8px;font-size:13px;color:#5a6268}
-    ul{padding-right:20px;color:#596774;font-size:13px}li{margin:7px 0}
-    footer{border-top:1px solid var(--line);padding-top:18px;margin-top:30px;font-size:11px;color:#7b8790}
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Vazirmatn', sans-serif; background: #f5f5f5; color: #333; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
+    header h1 { font-size: 24px; }
+    .tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+    .tab-btn { padding: 10px 20px; background: #34495e; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+    .tab-btn.active { background: #3498db; }
+    .tab-content { display: none; background: white; padding: 20px; border-radius: 8px; }
+    .tab-content.active { display: block; }
+    .form-group { margin-bottom: 20px; }
+    label { display: block; margin-bottom: 8px; font-weight: bold; }
+    input, textarea, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; font-family: inherit; }
+    textarea { resize: vertical; min-height: 100px; }
+    .btn { padding: 10px 20px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin-right: 10px; }
+    .btn:hover { background: #229954; }
+    .btn-danger { background: #e74c3c; }
+    .btn-danger:hover { background: #c0392b; }
+    .property-list { margin-top: 20px; }
+    .property-item { background: #ecf0f1; padding: 15px; border-radius: 4px; margin-bottom: 15px; }
+    .property-item h3 { margin-bottom: 10px; }
+    .property-item p { margin-bottom: 8px; font-size: 13px; }
+    .property-item .actions { margin-top: 10px; }
+    .property-item .actions button { margin-right: 5px; padding: 5px 10px; font-size: 12px; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; }
+    .modal.active { display: flex; justify-content: center; align-items: center; }
+    .modal-content { background: white; padding: 30px; border-radius: 8px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; }
+    .close { float: left; font-size: 28px; cursor: pointer; color: #999; }
+    .close:hover { color: #333; }
+    .success { background: #d4edda; color: #155724; padding: 15px; border-radius: 4px; margin-bottom: 20px; border-radius: 4px; }
+    .error { background: #f8d7da; color: #721c24; padding: 15px; border-radius: 4px; margin-bottom: 20px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
-<main>
-  <div class="brand"><img src="/assets/adaak-symbol.png" alt="نشان آداک"><div><strong>املاک آداک</strong><small>ADAAK REAL ESTATE</small></div></div>
-  <span class="eyebrow">CONTENT MANAGEMENT</span>
-  <h1>مدیریت وب‌سایت</h1>
-  <p>از این پنل می‌توانی صفحات عمومی آداک را ویرایش کنی، فایل تازه ثبت کنی، تصاویر را تغییر بدهی و انتشار هر فایل را مدیریت کنی. تغییرات در مخزن اختصاصی سایت ذخیره می‌شوند و پس از فعال‌شدن اتصال انتشار خودکار، روی دامنه اصلی قرار می‌گیرند.</p>
-  <div class="actions">
-    <a class="button primary" href="https://app.pagescms.org/" target="_blank" rel="noopener noreferrer">ورود به پنل مدیریت</a>
-    <a class="button secondary" href="/" rel="noopener">بازگشت به وب‌سایت</a>
+  <div class="container">
+    <header>
+      <h1>🏢 پنل ادمین - AMLAK ADAK</h1>
+      <p>مدیریت ملک‌ها و محتوای سایت</p>
+    </header>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('properties')">🏠 ملک‌ها</button>
+      <button class="tab-btn" onclick="switchTab('new-property')">➕ افزودن ملک</button>
+    </div>
+
+    <div id="message"></div>
+
+    <!-- Tab: Properties -->
+    <div id="properties" class="tab-content active">
+      <h2>مدیریت ملک‌ها</h2>
+      <div id="properties-list" class="property-list"></div>
+    </div>
+
+    <!-- Tab: New Property -->
+    <div id="new-property" class="tab-content">
+      <h2>افزودن ملک جدید</h2>
+      <form id="new-property-form" onsubmit="addProperty(event)">
+        <div class="grid">
+          <div>
+            <div class="form-group">
+              <label>کد ملک *</label>
+              <input type="text" id="code" placeholder="مثال: adk-03" required>
+            </div>
+            <div class="form-group">
+              <label>عنوان فارسی *</label>
+              <input type="text" id="title-fa" placeholder="آپارتمان 150 متری" required>
+            </div>
+            <div class="form-group">
+              <label>شهر</label>
+              <input type="text" id="city" placeholder="کرج">
+            </div>
+            <div class="form-group">
+              <label>محله</label>
+              <input type="text" id="district" placeholder="جهانشهر">
+            </div>
+          </div>
+          <div>
+            <div class="form-group">
+              <label>متراژ</label>
+              <input type="text" id="area" placeholder="150">
+            </div>
+            <div class="form-group">
+              <label>اتاق خواب</label>
+              <input type="number" id="bedrooms" placeholder="3" min="0">
+            </div>
+            <div class="form-group">
+              <label>شماره تلفن</label>
+              <input type="tel" id="phone" placeholder="09xxxxxxxxx">
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>توضیح</label>
+          <textarea id="description" placeholder="توضیحات کامل ملک"></textarea>
+        </div>
+        <button type="submit" class="btn">ذخیره ملک جدید</button>
+      </form>
+    </div>
   </div>
-  <div class="note"><strong>ورود امن:</strong> ورود با حساب GitHub انجام می‌شود. در نخستین ورود، دسترسی برنامه Pages CMS را فقط برای مخزن AMLAK-ADAK تأیید کن. رمز عبور یا کلید دسترسی را در این صفحه وارد نکن.</div>
-  <h2>چه چیزهایی قابل ویرایش است؟</h2>
-  <ul>
-    <li>متن‌ها و بخش‌های صفحه اصلی، درباره آداک و ارتباط با دفتر</li>
-    <li>ثبت فایل جدید، ویرایش مشخصات عمومی، گالری و وضعیت انتشار هر ملک</li>
-    <li>صفحه حریم خصوصی و صفحه ساخت QR</li>
-    <li>بارگذاری و جایگزینی تصاویر از طریق بخش رسانه‌ها</li>
-    <li>ظاهر سایت، رنگ‌ها، فاصله‌ها و تنظیمات فنی در ویرایشگر فایل</li>
-  </ul>
-  <p class="note">تغییرات ساختاری در HTML و CSS نیازمند دقت فنی است. اطلاعات مالکان، قیمت توافقی و نشانی دقیق ملک را در محتوای عمومی وارد نکن.</p>
-  <footer>ADAAK · مدیریت محتوای وب‌سایت</footer>
-</main>
+
+  <!-- Modal for editing -->
+  <div id="edit-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2>ویرایش ملک</h2>
+      <form id="edit-form" onsubmit="saveProperty(event)">
+        <div class="form-group">
+          <label>کد ملک</label>
+          <input type="text" id="edit-code" readonly>
+        </div>
+        <div class="form-group">
+          <label>عنوان فارسی</label>
+          <input type="text" id="edit-title-fa">
+        </div>
+        <div class="form-group">
+          <label>شهر</label>
+          <input type="text" id="edit-city">
+        </div>
+        <div class="form-group">
+          <label>محله</label>
+          <input type="text" id="edit-district">
+        </div>
+        <div class="form-group">
+          <label>متراژ</label>
+          <input type="text" id="edit-area">
+        </div>
+        <div class="form-group">
+          <label>اتاق خواب</label>
+          <input type="number" id="edit-bedrooms" min="0">
+        </div>
+        <div class="form-group">
+          <label>توضیح</label>
+          <textarea id="edit-description"></textarea>
+        </div>
+        <button type="submit" class="btn">ذخیره تغییرات</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
 </body>
 </html>
