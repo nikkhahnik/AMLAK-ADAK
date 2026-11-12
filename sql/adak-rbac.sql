@@ -91,7 +91,8 @@ create or replace function adak_private.listing_publish_guard() returns trigger
 language plpgsql security invoker set search_path = ''
 as $$
 begin
- if new.is_published is distinct from old.is_published
+ if (new.is_published is distinct from old.is_published or
+ (old.is_published and to_jsonb(new) - 'updated_at' is distinct from to_jsonb(old) - 'updated_at'))
  and not adak_private.has_access('listings.publish') then
   raise exception 'Publishing permission required';
  end if;
@@ -124,6 +125,18 @@ with check ((select adak_private.has_access('media.upload')) and not is_public);
 create policy adak_photo_update on public.adak_listing_photos for update to authenticated
 using ((select adak_private.has_access('media.edit')))
 with check ((select adak_private.has_access('media.edit')));
+create or replace function adak_private.photo_publish_guard() returns trigger
+language plpgsql security invoker set search_path = '' as $
+begin
+ if (new.is_public is distinct from old.is_public or old.is_public)
+ and not adak_private.has_access('listings.publish') then
+  raise exception 'Publishing permission required';
+ end if;
+ return new;
+end $;
+drop trigger if exists adak_photo_publish_guard on public.adak_listing_photos;
+create trigger adak_photo_publish_guard before update on public.adak_listing_photos
+for each row execute function adak_private.photo_publish_guard();
 create policy adak_photo_delete on public.adak_listing_photos for delete to authenticated
 using ((select adak_private.has_access('media.delete')));
 
@@ -178,8 +191,9 @@ create or replace function adak_private.block_guard() returns trigger
 language plpgsql security invoker set search_path = ''
 as $$
 begin
- if new.is_published is distinct from old.is_published and
- not adak_private.has_access('pages.publish') then raise exception 'Publishing permission required'; end if;
+ if (new.is_published is distinct from old.is_published or
+ (old.is_published and (new.content is distinct from old.content or new.title is distinct from old.title or new.block_key is distinct from old.block_key)))
+ and not adak_private.has_access('pages.publish') then raise exception 'Publishing permission required'; end if;
  if (new.styles is distinct from old.styles or new.sort_order is distinct from old.sort_order or new.page_key is distinct from old.page_key)
  and not adak_private.has_access('layout.edit') then raise exception 'Layout permission required'; end if;
  new.updated_at=now();
