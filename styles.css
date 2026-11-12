@@ -336,3 +336,5 @@ p{margin:0 0 1em}
 .skip:focus{top:12px}
 h1,h2,h3{text-wrap:balance}
 .footer-links a[dir=ltr]{text-align:right}
+.contact-card .card-hours{display:flex;align-items:center;gap:8px;color:var(--ink);font-weight:500;margin-top:-4px}
+.contact-card .card-hours .icon{width:18px;height:18px;color:var(--sky)}
