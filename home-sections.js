@@ -6,7 +6,7 @@ const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!==u
 const fa=n=>Number(n).toLocaleString('fa-IR');
 const icon=id=>{const s=document.createElementNS('http://www.w3.org/2000/svg','svg');s.setAttribute('class','icon');s.setAttribute('aria-hidden','true');const u=document.createElementNS('http://www.w3.org/2000/svg','use');u.setAttribute('href','/assets/icons.svg#'+id);s.append(u);return s};
 fetch('/properties.json',{credentials:'omit',cache:'no-store'}).then(r=>r.ok?r.json():[]).then(rows=>{
- const items=(Array.isArray(rows)?rows:[]).filter(x=>x&&x.is_published===true&&/^[a-z0-9][a-z0-9-]{2,63}$/.test(x.slug||'')&&x.slug!=='adk-019');
+ const items=(Array.isArray(rows)?rows:[]).filter(x=>x&&x.is_published===true&&/^[a-z0-9][a-z0-9-]{2,63}$/.test(x.slug||''));
  items.sort((a,b)=>a.slug.localeCompare(b.slug));
  let nTour=0;
  items.forEach(p=>{
@@ -17,7 +17,7 @@ fetch('/properties.json',{credentials:'omit',cache:'no-store'}).then(r=>r.ok?r.j
   if(gal&&pics.length){
    const f=el('article','x-gal-folder');f.id=id;
    const h=el('header','x-gal-folder-head'),d=el('div');
-   d.append(el('span','listing-number',p.slug.toUpperCase()),el('h3','',[p.title,p.area_m2?'آپارتمان '+fa(p.area_m2)+' متری':''].filter(Boolean).join(' · ')),el('p','',fa(pics.length)+' تصویر'+(p.tour_url?' · تور ۳۶۰':'')));
+   d.append(el('span','listing-number',p.code||p.slug.toUpperCase()),el('h3','',[p.title,p.area_m2?'آپارتمان '+fa(p.area_m2)+' متری':''].filter(Boolean).join(' · ')),el('p','',fa(pics.length)+' تصویر'+(p.tour_url?' · تور ۳۶۰':'')));
    const all=el('a','btn-text','همهٔ تصاویر '+(p.title||''));all.href=href;all.append(icon('arrow-left'));
    h.append(d,all);
    const row=el('div','x-gal-row');
@@ -34,7 +34,7 @@ fetch('/properties.json',{credentials:'omit',cache:'no-store'}).then(r=>r.ok?r.j
    const ul=el('ul','x-tour-scenes');
    [['living','پذیرایی و آشپزخانه'],['yard','محوطهٔ ساختمان'],['lobby','لابی ساختمان'],['balcony','بالکن'],['bedroom','اتاق خواب']].forEach(([k,t])=>{const li=el('li');const m=el('img');m.src='/assets/tour/150/'+k+'-360-thumb.jpg';m.alt='';m.loading='lazy';li.append(m,el('span','',t));ul.append(li)});
    const act=el('div','feature-actions');const go=el('a','btn btn-gold');go.href=p.tour_url;go.append(icon('eye'),'شروع تور ۳۶۰');const pg=el('a','btn btn-outline','صفحهٔ فایل');pg.href=href;act.append(go,pg);
-   body.append(el('span','listing-number',p.slug.toUpperCase()),el('h3','','تور مجازی '+(p.title||'')),facts,ul,act);
+   body.append(el('span','listing-number',p.code||p.slug.toUpperCase()),el('h3','','تور مجازی '+(p.title||'')),facts,ul,act);
    card.append(pic,body);tours.append(card);
   }
  });

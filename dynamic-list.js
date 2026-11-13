@@ -19,7 +19,7 @@ fetch('/properties.json',{credentials:'omit',cache:'no-store'})
   const items=Array.isArray(rows)?rows.filter(x=>x&&x.is_published===true&&x.slug&&/^[a-z0-9][a-z0-9-]{2,63}$/.test(x.slug)): [];
   wrap.replaceChildren();
   const lim=parseInt(wrap.dataset.limit||'',10);
-  const others=items.filter(x=>x.slug!=='adk-019');
+  const others=items;
   (lim>=0?others.slice(0,lim):others).forEach(p=>{
     const card=make('article','dynamic-property-card');
     card.dataset.category=p.category||'apartment';
@@ -32,7 +32,7 @@ fetch('/properties.json',{credentials:'omit',cache:'no-store'})
     img.loading='lazy';
     link.append(img);
     const content=make('div','dynamic-property-content');
-    const eyebrow=make('span','listing-number',p.slug.toUpperCase());
+    const eyebrow=make('span','listing-number',p.code||p.slug.toUpperCase());
     const h=make('h3','',p.title||'فایل ملکی آداک');
     const summary=make('p','',p.summary||'برای دریافت اطلاعات تکمیلی و هماهنگی بازدید با مشاوران آداک تماس بگیرید.');
     const meta=make('p','',[
@@ -58,7 +58,7 @@ fetch('/properties.json',{credentials:'omit',cache:'no-store'})
     card.append(link,content);
     wrap.append(card);
   });
-  const total=((first?1:0)+others.length).toLocaleString('fa-IR');
+  const total=others.length.toLocaleString('fa-IR');
   if(counter)counter.textContent=lim>=0?'همهٔ فایل‌ها ('+total+')':total+' فایل';
   window.dispatchEvent(new Event('adak-list-ready'));
  })
