@@ -1,7 +1,7 @@
 (function () {
   'use strict';
   const API = '/api/admin';
-  const DEMO = new URLSearchParams(location.search).has('demo');
+  const DEMO = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) && new URLSearchParams(location.search).has('demo');
   const $ = (s) => document.querySelector(s);
   const FA = (v) => String(v ?? '').replace(/\d/g, (d) => '۰۱۲۳۴۵۶۷۸۹'[d]);
   const EN = (v) => String(v ?? '').replace(/[۰-۹]/g, (d) => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g, (d) => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).trim();
@@ -14,7 +14,9 @@
   let photos = [];    // [{src, file?(dataURL to upload), name}]
 
   /* ---------- views ---------- */
+  let shownAt = Date.now();
   function show(id) {
+    if (id === 'view-login') shownAt = Date.now();
     ['view-login', 'view-dash', 'view-edit'].forEach((v) => { $('#' + v).hidden = v !== id; });
     window.scrollTo(0, 0);
   }
@@ -46,7 +48,7 @@
     const btn = $('#login-btn'); const errEl = $('#login-error'); errEl.hidden = true;
     btn.disabled = true; btn.textContent = 'در حال ورود…';
     try {
-      const cred = { username: $('#user').value.trim(), password: $('#pw').value };
+      const cred = { username: $('#user').value.trim(), password: $('#pw').value, website: $('#website').value, elapsed: Date.now() - shownAt };
       if (DEMO) {
         if (cred.username !== 'admin' || cred.password !== 'password') throw Error('نام کاربری یا رمز عبور درست نیست.');
         token = 'demo'; await loadList(); return;
@@ -207,7 +209,13 @@
 
   async function save(rec, index, uploads) {
     if (DEMO) { if (index >= 0) listings[index] = rec; else listings.push(rec); renderList(); return; }
-    const r = await api('/save', { listing: rec, uploads });
+    const done = [];
+    for (let k = 0; k < uploads.length; k++) {
+      $('#save-btn').textContent = `ارسال عکس ${FA(k + 1)} از ${FA(uploads.length)}…`;
+      done.push(await api('/upload', uploads[k]));
+    }
+    $('#save-btn').textContent = 'در حال انتشار…';
+    const r = await api('/save', { listing: rec, uploads: done });
     listings = r.listings; renderList();
   }
   $('#edit-form').addEventListener('submit', async (e) => {
