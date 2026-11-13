@@ -25,13 +25,15 @@ SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{2,63}$")
 HANDBUILT = "adk-019"  # served by property.html via the /p/* rewrite
 PHONE_MAIN, PHONE_2 = "+989126895443", "+989123619831"
 WHATSAPP = "https://wa.me/989196589769"
+GEO = (35.870302, 50.969406)  # pin confirmed by the office (2026-11-13)
+MAP_URL = f"https://www.google.com/maps/search/?api=1&query={GEO[0]},{GEO[1]}"
 FA_DIGITS = str.maketrans("0123456789", "۰۱۲۳۴۵۶۷۸۹")
 
 AGENT = {
     "@type": "RealEstateAgent",
     "@id": SITE + "/#agency",
     "name": "املاک آداک",
-    "alternateName": "ADAAK Real Estate",
+    "alternateName": ["دفتر املاک آداک", "مشاورین املاک آداک", "ADAAK Real Estate", "ADAK Real Estate"],
     "url": SITE + "/",
     "logo": SITE + "/assets/adaak-symbol-512.png",
     "image": [OG_DEFAULT, SITE + "/assets/office/adak-office-interior.webp"],
@@ -42,11 +44,13 @@ AGENT = {
     ],
     "address": {
         "@type": "PostalAddress",
-        "streetAddress": "اشتراکی جنوبی، بین گلستان ۱۳ و ۱۴",
+        "streetAddress": "بلوار اشتراکی جنوبی، بین گلستان ۱۳ و ۱۴، دفتر مشاورین املاک آداک",
         "addressLocality": "رجایی‌شهر، کرج",
         "addressRegion": "البرز",
         "addressCountry": "IR",
     },
+    "geo": {"@type": "GeoCoordinates", "latitude": GEO[0], "longitude": GEO[1]},
+    "hasMap": MAP_URL,
     "areaServed": [{"@type": "City", "name": "کرج"}, {"@type": "Place", "name": "رجایی‌شهر"}],
     "sameAs": ["https://www.instagram.com/Adaak.realestate/"],
     "description": "دفتر املاک آداک، مشاور خرید و فروش آپارتمان در رجایی‌شهر کرج با بازدید آنلاین و ۳۶۰ درجه.",
@@ -440,12 +444,29 @@ def main():
             image=SITE + "/assets/tour/150/living-360-thumb.jpg",
             schemas=[breadcrumb([("خانه", "/"), ("بازدید ۳۶۰ درجه", "/bazdid-360/"), ("تور مجازی", "/tour/")])],
         ),
+        "rahnama-bazdid-apartman/index.html": dict(
+            title="چک‌لیست بازدید آپارتمان قبل از خرید | راهنمای املاک آداک کرج",
+            desc="هنگام بازدید آپارتمان قبل از خرید چه چیزهایی را ببینید و بپرسید؟ چک‌لیست ساختمان، تأسیسات، نور و صدا، مدارک و هزینه‌ها؛ برای بازدید حضوری و آنلاین.",
+            path="/rahnama-bazdid-apartman/",
+            keywords=["چک لیست بازدید آپارتمان", "چک‌لیست خرید آپارتمان", "نکات بازدید آپارتمان", "نکات خرید آپارتمان",
+                      "قبل از خرید آپارتمان چه چیزهایی را چک کنیم", "بازدید آپارتمان قبل از خرید", "راهنمای خرید آپارتمان",
+                      "خرید آپارتمان کرج", "بازدید آنلاین آپارتمان", "بازدید ۳۶۰ درجه"] + BASE_KEYWORDS,
+            image=SITE + "/assets/empty/08.webp", og_type="article",
+            schemas=[{"@type": "Article", "headline": "چک‌لیست بازدید آپارتمان قبل از خرید",
+                      "inLanguage": "fa-IR", "datePublished": "2026-11-13", "dateModified": "2026-11-13",
+                      "author": {"@id": SITE + "/#agency"}, "publisher": {"@id": SITE + "/#agency"},
+                      "image": SITE + "/assets/empty/08.webp", "mainEntityOfPage": SITE + "/rahnama-bazdid-apartman/"},
+                     faq_schema(faqs.get("guide", [])),
+                     breadcrumb([("خانه", "/"), ("خرید آپارتمان در رجایی‌شهر", "/kharid-apartman-rajaei-shahr/"),
+                                 ("چک‌لیست بازدید آپارتمان", "/rahnama-bazdid-apartman/")])],
+        ),
         "privacy.html": dict(
             title="حریم خصوصی | املاک آداک",
             desc="شیوهٔ نمایش اطلاعات فایل‌های ملکی در سایت املاک آداک و حفظ محرمانگی اطلاعات مالکان.",
             path="/privacy.html",
             keywords=["املاک آداک", "حریم خصوصی"],
             robots="index,follow",
+            schemas=[breadcrumb([("خانه", "/"), ("حریم خصوصی", "/privacy.html")])],
         ),
     }
     fills = {
@@ -454,6 +475,7 @@ def main():
         "index.html": [("cards", "".join(card_html(p) for p in published[:3]))]
                       + ([("tourcards", "".join(tour_card_html(p) for p in with_tour))] if with_tour else []),
         "kharid-apartman-rajaei-shahr/index.html": [("files", mini_cards([(p, f"/p/{p['slug']}", "") for p in published[:3]]))],
+        "rahnama-bazdid-apartman/index.html": [("files", mini_cards([(p, f"/p/{p['slug']}", "") for p in published[:3]]))],
         "forosh-melk-karaj/index.html": [("files", mini_cards([(p, f"/p/{p['slug']}", "") for p in published[:2]]))],
         "files/index.html": [("cards", "".join(card_html(p, eager=(i == 0)) for i, p in enumerate(published)))],
     }
@@ -462,7 +484,7 @@ def main():
         for name, inner in fills.get(rel, []):
             page = fill(page, name, inner)
         write(rel, apply_head(page, seo_block(cfg["title"], cfg["desc"], cfg["path"], cfg["keywords"],
-                                                   image=cfg.get("image", OG_DEFAULT),
+                                                   image=cfg.get("image", OG_DEFAULT), og_type=cfg.get("og_type", "website"),
                                                    robots=cfg.get("robots", "index,follow,max-image-preview:large"),
                                                    schemas=cfg.get("schemas", ()))))
 
@@ -509,7 +531,8 @@ def main():
             ("/kharid-apartman-rajaei-shahr/", 0.9, "weekly", ["/assets/empty/08.webp"]),
             ("/forosh-melk-karaj/", 0.8, "monthly", ["/assets/office/adak-office-interior.webp"]),
             ("/daftar-amlak-karaj/", 0.9, "monthly", ["/assets/office/adak-office-front.webp", "/assets/office/adak-office-interior.webp"]),
-            ("/tour/", 0.7, "monthly", ["/assets/tour/150/living-360-thumb.jpg"])]
+            ("/tour/", 0.7, "monthly", ["/assets/tour/150/living-360-thumb.jpg"]),
+            ("/rahnama-bazdid-apartman/", 0.8, "monthly", ["/assets/empty/08.webp"])]
     urls += [(f"/p/{p['slug']}", 0.8, "weekly", listing_images(p)) for p in published]
     urls.append(("/privacy.html", 0.2, "yearly", []))
     out = ['<?xml version="1.0" encoding="UTF-8"?>',

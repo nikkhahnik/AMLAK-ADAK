@@ -161,7 +161,7 @@ p{margin:0 0 1em}
 .footer .brand-en{color:#8597A6}
 .footer-main p{margin:18px 0 0;line-height:2}
 .footer-links{display:flex;flex-direction:column;gap:6px}
-.footer-links h4{color:#fff;font-size:16px;margin-bottom:8px}
+.footer-links h2{color:#fff;font-size:16px;margin:0 0 8px;font-family:inherit;font-weight:700}
 .footer-links a:hover{color:#fff}
 .footer-bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid #1F354B;padding:22px 0;font-size:13px;color:#8597A6}
 
@@ -738,7 +738,7 @@ html[data-theme="light"] .home .x-overlay:not(.x-solid) .theme-toggle{color:#0D2
 html[data-theme="light"] .home .x-overlay:not(.x-solid) .main-nav a:hover{color:#0F6DB8;border-bottom-color:#0F6DB8}
 html[data-theme="light"] .footer{background:#F0F3F6;color:#354758;border-top:1px solid #D7E0E8}
 html[data-theme="light"] .footer .brand-fa,
-html[data-theme="light"] .footer-links h4,
+html[data-theme="light"] .footer-links h2,
 html[data-theme="light"] .footer-links .manager-line span:first-child{color:#0D233A}
 html[data-theme="light"] .footer .brand-en,
 html[data-theme="light"] .footer-bottom{color:#647789}
@@ -786,5 +786,12 @@ html[data-theme="light"] .footer-links a:hover{color:#0F6DB8}
 .lp-cta h2{color:#fff}.lp-cta p{color:#c9d3dd;margin:0 0 20px}
 .lp-cta .btn-text{color:#fff}
 html[data-theme="dark"] .lp-cta{background:var(--surface);border:1px solid var(--line)}
+.lp-hero-text{grid-template-columns:1fr}
+.lp-hero-text .lp-lead{max-width:70ch}
+.lp-check{list-style:none;margin:0;padding:0;display:grid;gap:12px;max-width:75ch}
+.lp-check li{position:relative;padding-inline-start:30px;line-height:2;color:var(--text)}
+.lp-check li::before{content:"";position:absolute;inset-inline-start:4px;top:.62em;width:14px;height:14px;border:2px solid var(--gold,#c9a24a);border-radius:4px}
+.lp-check a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.lp-map-link{margin-inline-start:6px}
 @media(max-width:860px){.lp-hero,.lp-two{grid-template-columns:1fr;gap:26px}.lp-hero-pic{order:-1}.lp-steps,.lp-mini{grid-template-columns:1fr}.lp-cards{grid-template-columns:1fr 1fr}.lp-cta{padding:24px}}
 @media(max-width:520px){.lp-cards{grid-template-columns:1fr}}
