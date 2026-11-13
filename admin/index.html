@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0D233A">
+<title>پنل مدیریت | املاک آداک</title>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+
+<!-- ورود -->
+<section id="view-login" class="login" hidden>
+  <form class="login-card" id="login-form" autocomplete="on">
+    <img src="/assets/adaak-symbol-96.png" alt="" width="64" height="53">
+    <h1>ورود به پنل مدیریت</h1>
+    <p class="muted">املاک آداک</p>
+    <label for="user">نام کاربری</label>
+    <input id="user" name="username" autocomplete="username" dir="ltr" required>
+    <label for="pw">رمز عبور</label>
+    <div class="pw-row">
+      <input id="pw" name="password" type="password" autocomplete="current-password" dir="ltr" required>
+      <button type="button" class="ghost" id="pw-toggle" aria-label="نمایش رمز">نمایش</button>
+    </div>
+    <p class="form-error" id="login-error" role="alert" hidden></p>
+    <button class="btn primary big" type="submit" id="login-btn">ورود</button>
+    <a class="back" href="/">بازگشت به سایت</a>
+  </form>
+</section>
+
+<!-- داشبورد -->
+<section id="view-dash" hidden>
+  <header class="top">
+    <div class="top-in">
+      <div class="brand"><img src="/assets/adaak-symbol-96.png" alt="" width="40" height="33"><div><b>پنل مدیریت آداک</b><small>مدیریت فایل‌های سایت</small></div></div>
+      <div class="top-actions"><a class="btn ghost" href="/" target="_blank" rel="noopener">دیدن سایت</a><button class="btn ghost" id="logout" type="button">خروج</button></div>
+    </div>
+  </header>
+  <main class="wrap">
+    <div class="dash-head">
+      <div><h1>فایل‌های املاک</h1><p class="muted" id="stats"></p></div>
+      <button class="btn primary big" id="add-btn" type="button"><span aria-hidden="true">＋</span> افزودن فایل جدید</button>
+    </div>
+    <div class="tools"><input type="search" id="q" placeholder="جستجو با کد، متراژ یا محله…" aria-label="جستجو"></div>
+    <div id="list" class="list" aria-live="polite"></div>
+    <p class="help">راهنما: برای تغییر هر فایل روی «ویرایش» بزنید. با «نمایش در سایت» می‌توانید فایلی را بدون حذف، موقتاً از سایت پنهان کنید.</p>
+  </main>
+</section>
+
+<!-- ویرایش / افزودن -->
+<section id="view-edit" hidden>
+  <header class="top">
+    <div class="top-in">
+      <button class="btn ghost" type="button" data-back>→ بازگشت</button>
+      <b id="edit-title">افزودن فایل جدید</b>
+      <span></span>
+    </div>
+  </header>
+  <form class="wrap editor" id="edit-form" novalidate>
+    <fieldset class="step">
+      <legend><span class="n">۱</span> عکس‌ها</legend>
+      <p class="muted">عکس‌ها را بکشید و اینجا رها کنید یا روی دکمه بزنید. ستاره یعنی عکس اصلی (روی کارت فایل دیده می‌شود).</p>
+      <label class="drop" id="drop"><input type="file" id="files" accept="image/*" multiple hidden><span class="drop-ic" aria-hidden="true">⬆</span><b>انتخاب یا رها کردن عکس</b><small>JPG یا PNG — عکس‌ها خودکار سبک می‌شوند</small></label>
+      <div class="thumbs" id="thumbs"></div>
+    </fieldset>
+
+    <fieldset class="step">
+      <legend><span class="n">۲</span> مشخصات</legend>
+      <div class="grid">
+        <label>کد فایل<input id="f-code" inputmode="numeric" placeholder="مثلاً ۴" required></label>
+        <label>نوع ملک<select id="f-cat"><option value="apartment">آپارتمان</option><option value="villa">ویلایی</option><option value="commercial">تجاری</option><option value="land">زمین</option></select></label>
+        <label>متراژ (متر)<input id="f-area" inputmode="numeric" placeholder="مثلاً ۱۲۰"></label>
+        <label>تعداد خواب<input id="f-bed" inputmode="numeric" placeholder="مثلاً ۲"></label>
+        <label>شهر<input id="f-city" value="کرج"></label>
+        <label>محله<input id="f-area-name" placeholder="مثلاً رجایی‌شهر"></label>
+      </div>
+    </fieldset>
+
+    <fieldset class="step">
+      <legend><span class="n">۳</span> توضیحات</legend>
+      <label for="f-sum" class="sr">توضیحات</label>
+      <textarea id="f-sum" rows="6" maxlength="1200" placeholder="طبقه، امکانات، وضعیت سند و تخلیه، …"></textarea>
+      <div class="row-between"><p class="warn">⚠ قیمت، نشانی دقیق و نام یا شمارهٔ مالک را اینجا ننویسید؛ این متن در سایت عمومی است.</p><small class="muted" id="sum-count">۰ / ۱۲۰۰</small></div>
+    </fieldset>
+
+    <fieldset class="step">
+      <legend><span class="n">۴</span> بازدید ۳۶۰ درجه <small class="muted">(اختیاری)</small></legend>
+      <label>لینک تور ۳۶۰<input id="f-tour" dir="ltr" placeholder="مثلاً /tour/ یا لینک کامل تور"></label>
+    </fieldset>
+
+    <fieldset class="step">
+      <legend><span class="n">۵</span> نمایش</legend>
+      <label class="switch"><input type="checkbox" id="f-pub" checked><span class="slider" aria-hidden="true"></span><span>نمایش در سایت</span></label>
+      <p class="muted">اگر خاموش باشد، فایل ذخیره می‌شود ولی در سایت دیده نمی‌شود.</p>
+    </fieldset>
+
+    <div class="preview-box"><b>پیش‌نمایش عنوان در گوگل</b><p class="g-title" id="g-title"></p><p class="g-desc" id="g-desc"></p></div>
+
+    <div class="savebar">
+      <button class="btn danger" type="button" id="del-btn" hidden>حذف فایل</button>
+      <span class="grow"></span>
+      <button class="btn ghost" type="button" data-back>انصراف</button>
+      <button class="btn primary big" type="submit" id="save-btn">ذخیره و انتشار</button>
+    </div>
+  </form>
+</section>
+
+<div class="toast" id="toast" role="status" hidden></div>
+<dialog id="confirm"><p id="confirm-text"></p><div class="row-end"><button class="btn ghost" value="no" type="button" id="c-no">نه</button><button class="btn danger" type="button" id="c-yes">بله، حذف شود</button></div></dialog>
+
+<script src="/admin/admin.js"></script>
+</body>
+</html>
