@@ -18,7 +18,9 @@ fetch('/properties.json',{credentials:'omit',cache:'no-store'})
  .then(rows=>{
   const items=Array.isArray(rows)?rows.filter(x=>x&&x.is_published===true&&x.slug&&/^[a-z0-9][a-z0-9-]{2,63}$/.test(x.slug)): [];
   wrap.replaceChildren();
-  items.filter(x=>x.slug!=='adk-019').forEach(p=>{
+  const lim=parseInt(wrap.dataset.limit||'',10);
+  const others=items.filter(x=>x.slug!=='adk-019');
+  (lim>=0?others.slice(0,lim):others).forEach(p=>{
     const card=make('article','dynamic-property-card');
     card.dataset.category=p.category||'apartment';
     card.dataset.search=[p.title,p.summary,p.category,p.city,p.public_area,p.area_m2,p.bedrooms].filter(Boolean).join(' ').toLowerCase();
@@ -56,11 +58,12 @@ fetch('/properties.json',{credentials:'omit',cache:'no-store'})
     card.append(link,content);
     wrap.append(card);
   });
-  if(counter)counter.textContent=((first?1:0)+items.filter(x=>x.slug!=='adk-019').length).toLocaleString('fa-IR')+' فایل در سایت';
+  const total=((first?1:0)+others.length).toLocaleString('fa-IR');
+  if(counter)counter.textContent=lim>=0?'همهٔ فایل‌ها ('+total+')':total+' فایل';
   window.dispatchEvent(new Event('adak-list-ready'));
  })
  .catch(()=>{
-   if(counter&&first)counter.textContent='۱ فایل در سایت';
+   
    window.dispatchEvent(new Event('adak-list-ready'));
  });
 })();
