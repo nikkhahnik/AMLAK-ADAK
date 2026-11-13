@@ -1,0 +1,1 @@
+(()=>{const q=new URLSearchParams(location.search);const s=document.getElementById("property-search"),t=document.getElementById("property-type");if(q.get("q"))s.value=q.get("q");if(q.get("type")&&[...t.options].some(o=>o.value===q.get("type")))t.value=q.get("type");})();

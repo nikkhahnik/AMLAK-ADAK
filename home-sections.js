@@ -1,6 +1,6 @@
 (()=>{'use strict';
 const gal=document.getElementById('gal-list'),codes=document.getElementById('gal-codes'),tours=document.getElementById('tour-list');
-if(!tours)return;
+if(!tours||tours.querySelector('.x-tour-card'))return; /* pre-rendered by scripts/build_seo.py */
 const safe=v=>{try{const u=new URL(v,location.origin);return u.origin===location.origin?u.pathname:null}catch{return null}};
 const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!==undefined)e.textContent=String(x);return e};
 const fa=n=>Number(n).toLocaleString('fa-IR');

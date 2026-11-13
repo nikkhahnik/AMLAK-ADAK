@@ -1,0 +1,1 @@
+(()=>{const h=document.getElementById("site-header");const n=document.getElementById("main-nav");const f=()=>h&&h.classList.toggle("x-solid",scrollY>40||!!(n&&n.classList.contains("open")));addEventListener("scroll",f,{passive:true});document.getElementById("menu-toggle")?.addEventListener("click",()=>setTimeout(f));f();})();

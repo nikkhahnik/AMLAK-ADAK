@@ -3,6 +3,9 @@ const wrap=document.querySelector('#more-properties');
 const counter=document.querySelector('#public-count');
 if(!wrap)return;
 const first=document.querySelector('#first-property');
+if(wrap.querySelector('.dynamic-property-card')){ /* pre-rendered by scripts/build_seo.py */
+  if(counter&&!counter.textContent.trim())counter.textContent='همهٔ فایل‌ها';
+  window.dispatchEvent(new Event('adak-list-ready'));return;}
 const safeImage=value=>{
   if(!value)return '/assets/adaak-symbol.png';
   try{const u=new URL(value,location.origin);return u.origin===location.origin?u.pathname+u.search:'/assets/adaak-symbol.png'}catch{return '/assets/adaak-symbol.png'}
