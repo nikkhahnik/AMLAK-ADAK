@@ -20,12 +20,7 @@
   status = 301
 
 # Each published listing gets an explicit rule in _redirects (written by scripts/build_seo.py,
-# applied before this file). Anything else under /p/ is a real 404.
-[[redirects]]
-  from = "/p/:slug/"
-  to = "/p/:slug"
-  status = 301
-
+# applied before this file; Netlify matches with or without a trailing slash). Anything else under /p/ is a real 404.
 [[redirects]]
   from = "/p/*"
   to = "/404.html"
