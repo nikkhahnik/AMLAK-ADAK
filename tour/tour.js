@@ -2,14 +2,14 @@
 const data=window.ADAAK_TOUR||[];
 const el=document.getElementById('tour-viewer');
 if(!el||!data.length||typeof window.pannellum==='undefined')return;
-const links={
+const links=window.ADAAK_TOUR_LINKS||{
   yard:[{pitch:-2,yaw:39,type:'scene',text:'ورود به لابی',sceneId:'lobby'}],
   lobby:[{pitch:-4,yaw:-150,type:'scene',text:'محوطهٔ ساختمان',sceneId:'yard'}],
   living:[{pitch:-8,yaw:-95,type:'scene',text:'بالکن',sceneId:'balcony'},{pitch:-3,yaw:110,type:'scene',text:'اتاق خواب',sceneId:'bedroom'}],
   balcony:[{pitch:-6,yaw:-150,type:'scene',text:'بازگشت به پذیرایی',sceneId:'living'}],
   bedroom:[{pitch:-4,yaw:-37,type:'scene',text:'پذیرایی',sceneId:'living'}]
 };
-const startYaw={yard:30,living:35};
+const startYaw=window.ADAAK_TOUR_YAW||{yard:30,living:35};
 const scenes={};
 data.forEach(s=>{
   const base={type:'equirectangular',panorama:s.src,yaw:(startYaw[s.id]||0),pitch:0,avoidShowingBackground:true,hotSpots:links[s.id]||[]};

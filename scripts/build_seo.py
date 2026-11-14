@@ -444,6 +444,15 @@ def main():
             image=SITE + "/assets/tour/150/living-360-thumb.jpg",
             schemas=[breadcrumb([("خانه", "/"), ("بازدید ۳۶۰ درجه", "/bazdid-360/"), ("تور مجازی", "/tour/")])],
         ),
+        "tour/adk-06/index.html": dict(
+            title="تور مجازی ۳۶۰ درجه آپارتمان کد ۰۶ | بازدید آنلاین املاک آداک",
+            desc="بازدید آنلاین ۳۶۰ درجه از فایل کد ۰۶ املاک آداک؛ خیابان، ورودی، راهرو و آسانسور، پذیرایی، بالکن و اتاق‌خواب‌ها را آنلاین ببینید و بعد بازدید حضوری هماهنگ کنید.",
+            path="/tour/adk-06/",
+            keywords=["تور مجازی آپارتمان", "تور ۳۶۰ درجه", "بازدید ۳۶۰ درجه", "بازدید آنلاین", "بازدید آنلاین آپارتمان",
+                      "بازدید مجازی ملک", "تور مجازی آپارتمان کرج", "پانورامای ۳۶۰ آپارتمان"] + BASE_KEYWORDS,
+            image=SITE + "/assets/tour/u2/living-360-thumb.jpg",
+            schemas=[breadcrumb([("خانه", "/"), ("بازدید ۳۶۰ درجه", "/bazdid-360/"), ("تور مجازی کد ۰۶", "/tour/adk-06/")])],
+        ),
         "rahnama-bazdid-apartman/index.html": dict(
             title="چک‌لیست بازدید آپارتمان قبل از خرید | راهنمای املاک آداک کرج",
             desc="هنگام بازدید آپارتمان قبل از خرید چه چیزهایی را ببینید و بپرسید؟ چک‌لیست ساختمان، تأسیسات، نور و صدا، مدارک و هزینه‌ها؛ برای بازدید حضوری و آنلاین.",
@@ -532,7 +541,8 @@ def main():
             ("/forosh-melk-karaj/", 0.8, "monthly", ["/assets/office/adak-office-interior.webp"]),
             ("/daftar-amlak-karaj/", 0.9, "monthly", ["/assets/office/adak-office-front.webp", "/assets/office/adak-office-interior.webp"]),
             ("/tour/", 0.7, "monthly", ["/assets/tour/150/living-360-thumb.jpg"]),
-            ("/rahnama-bazdid-apartman/", 0.8, "monthly", ["/assets/empty/08.webp"])]
+            ("/rahnama-bazdid-apartman/", 0.8, "monthly", ["/assets/empty/08.webp"]),
+            ("/tour/adk-06/", 0.7, "monthly", ["/assets/tour/u2/living-360-thumb.jpg"])]
     urls += [(f"/p/{p['slug']}", 0.8, "weekly", listing_images(p)) for p in published]
     urls.append(("/privacy.html", 0.2, "yearly", []))
     out = ['<?xml version="1.0" encoding="UTF-8"?>',
