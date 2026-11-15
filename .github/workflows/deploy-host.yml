@@ -1,0 +1,78 @@
+# انتشار خودکار روی هاست/سرور ایرانی — جایگزین دیپلوی خودکار Netlify
+#
+# قبل از اولین اجرا، این مقادیر را در GitHub ثبت کنید:
+#   Settings → Secrets and variables → Actions → New repository secret
+#     FTP_SERVER     آدرس سرور FTP هاست (مثلاً ftp.amlakadak.ir)
+#     FTP_USERNAME   نام کاربری FTP
+#     FTP_PASSWORD   رمز FTP
+#   و در تب Variables (نه Secrets):
+#     FTP_DIR        مسیر ریشهٔ سایت روی هاست، معمولاً /public_html/
+#
+# با هر push روی main: سایت ساخته می‌شود و فقط فایل‌های تغییریافته آپلود می‌شوند.
+name: انتشار روی هاست
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-host
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: ساخت و آپلود
+    runs-on: ubuntu-latest
+    steps:
+      - name: دریافت کد
+        uses: actions/checkout@v4
+
+      - name: نصب پایتون
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: ساخت صفحات، sitemap و کانفیگ سرور
+        run: python3 scripts/build_seo.py
+
+      - name: بررسی سلامت خروجی
+        run: |
+          set -euo pipefail
+          python3 -m json.tool properties.json > /dev/null
+          for f in index.html property.html privacy.html qr.html .htaccess \
+                   api/admin/index.php admin/index.html sitemap.xml robots.txt \
+                   googlea1fc99ef7e650390.html; do
+            test -s "$f" || { echo "فایل لازم پیدا نشد یا خالی است: $f"; exit 1; }
+          done
+          test -d assets
+          grep -q "RewriteEngine On" .htaccess
+          echo "خروجی سالم است"
+
+      - name: مهر زمان انتشار
+        run: |
+          echo "build_seo $(date -u +%Y-%m-%dT%H:%M:%S%:z) listings=$(python3 -c 'import json;print(len(json.load(open("properties.json"))))')" > build-info.txt
+
+      - name: آپلود روی هاست
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          server-dir: ${{ vars.FTP_DIR || '/public_html/' }}
+          # این‌ها نباید روی هاست بروند
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github/**
+            **/netlify/**
+            netlify.toml
+            _headers
+            _redirects
+            **/scripts/**
+            **/deploy/**
+            **/*.md
+            **/*.sql
+            .pages.yml
+            api/admin/config.php
