@@ -26,7 +26,7 @@ HANDBUILT = "adk-019"  # served by property.html via the /p/* rewrite
 PHONE_MAIN, PHONE_2 = "+989126895443", "+989123619831"
 WHATSAPP = "https://wa.me/989196589769"
 GEO = (35.870302, 50.969406)  # pin confirmed by the office (2026-11-13)
-MAP_URL = f"https://www.google.com/maps/search/?api=1&query={GEO[0]},{GEO[1]}"
+MAP_URL = "https://maps.app.goo.gl/iCvg1iULJ1ab1wsk6"  # official office listing
 FA_DIGITS = str.maketrans("0123456789", "۰۱۲۳۴۵۶۷۸۹")
 
 AGENT = {
@@ -51,7 +51,7 @@ AGENT = {
     },
     "geo": {"@type": "GeoCoordinates", "latitude": GEO[0], "longitude": GEO[1]},
     "hasMap": MAP_URL,
-    "areaServed": [{"@type": "City", "name": "کرج"}, {"@type": "Place", "name": "رجایی‌شهر"}],
+    "areaServed": [{"@type": "City", "name": "کرج"}, {"@type": "Place", "name": "رجایی‌شهر"}, {"@type": "Place", "name": "گوهردشت"}],
     "sameAs": ["https://www.instagram.com/Adaak.realestate/"],
     "description": "دفتر املاک آداک، مشاور خرید و فروش آپارتمان در رجایی‌شهر کرج با بازدید آنلاین و ۳۶۰ درجه.",
     "slogan": "اصالت در هویت، دقت در انتخاب.",
