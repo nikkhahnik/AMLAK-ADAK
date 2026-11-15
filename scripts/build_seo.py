@@ -245,41 +245,107 @@ def listing_desc(p):
 
 
 def render_listing_main(p, slug):
-    """Server-side twin of property-page.js (keep markup in sync)."""
-    title = p.get("title") or "فایل ملکی آداک"
-    summary = p.get("summary") or "برای دریافت اطلاعات تکمیلی و هماهنگی بازدید با مشاوران آداک تماس بگیرید."
-    loc = p.get("public_area") or p.get("city") or "کرج"
-    meta = []
-    if p.get("area_m2"):
-        meta.append(f"{esc(p['area_m2'])} متر")
-    if p.get("bedrooms") is not None:
-        meta.append(f"{esc(p['bedrooms'])} اتاق خواب")
-    meta.append(esc(loc))
-    figs = "".join(
-        f'<figure class="adak-dynamic-photo"><img src="{esc(src)}" alt="{esc(title)} · تصویر {i + 1}" loading="{"lazy" if i else "eager"}"></figure>'
-        for i, src in enumerate(listing_images(p))
-    ) or "<p>تصاویر این فایل به‌زودی اضافه می‌شود.</p>"
-    tour = safe_path(p.get("tour_url"))
-    tour_btn = f'<a class="icon-button tour-button" href="{esc(tour)}">مشاهدهٔ تور ۳۶۰</a>' if tour else ""
+    """Server-side twin of property-page.js (keep markup in sync).
+
+    Layout mirrors property.html (کد ۰۱) so every listing page reads the same.
+    """
     from urllib.parse import quote
+
+    title = p.get("title") or "فایل ملکی آداک"
+    loc = p.get("public_area") or p.get("city") or "کرج"
+    area = p.get("area_m2")
+    kind = {"apartment": "آپارتمان", "villa": "ویلایی", "commercial": "ملک تجاری", "land": "زمین"}.get(
+        p.get("category"), "آپارتمان")
+    h1 = f"{kind} {fa(area)} متری | {title}" if area else title
+
+    imgs = listing_images(p)
+    ico = lambda n: f'<svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#{n}"/></svg>'
+
+    # mosaic: first five photos, rest live in the gallery section below
+    mosaic = "".join(
+        f'<button type="button" class="l-mosaic-photo" data-index="{i}">'
+        f'<img src="{esc(src)}" alt="{esc(title)} · تصویر {fa(i + 1)}"'
+        f'{" fetchpriority=\"high\"" if i == 0 else " loading=\"lazy\""}></button>'
+        for i, src in enumerate(imgs[:5]))
+    mosaic = (f'<div class="photo-mosaic" aria-label="پیش‌نمایش تصاویر ملک">{mosaic}'
+              f'<button type="button" class="view-all" id="l-view-all">{ico("image")} مشاهده همه تصاویر</button></div>'
+              ) if imgs else '<p>تصاویر این فایل به‌زودی اضافه می‌شود.</p>'
+
+    grid = "".join(
+        f'<button type="button" data-index="{i}" aria-label="بزرگ‌نمایی تصویر {fa(i + 1)}">'
+        f'<img src="{esc(src)}" alt="{esc(title)} · تصویر {fa(i + 1)}" loading="lazy"></button>'
+        for i, src in enumerate(imgs))
+
+    headline = p.get("headline") or title
+    paras = [p.get("intro") or p.get("summary") or ""]
+    if p.get("highlights"):
+        paras.append(f'<strong>{esc(p["highlights"])}</strong> از مزیت‌های شاخص این واحد هستند.')
+    if p.get("extra"):
+        paras.append(esc(p["extra"]))
+    body = "".join(f"<p>{t if t.startswith('<strong>') else esc(t)}</p>" for t in paras if t)
+    body += ('<p class="property-ending">برای آشنایی با جزئیات بیشتر و تجربه بازدید اختصاصی، '
+             'با مشاوران املاک آداک همراه شوید.</p>')
+
+    chips_src = p.get("chips") or [["area", f"{fa(area)} متر"] if area else None,
+                                   ["bed", f"{fa(p.get('bedrooms'))} اتاق خواب"]
+                                   if p.get("bedrooms") is not None else None,
+                                   ["location", loc]]
+    chips = "".join(f'<span class="feature-chip">{ico(c[0])} {esc(c[1])}</span>'
+                    for c in chips_src if c)
+
+    rows = p.get("details") or [["نوع ملک", f"{kind} مسکونی"],
+                                ["متراژ", f"{fa(area)} متر" if area else "استعلام از مشاور"],
+                                ["موقعیت دقیق، قیمت و سایر جزئیات", "استعلام از مشاور"]]
+    table = "".join(f"<tr><td>{esc(r[0])}</td><td>{esc(r[1])}</td></tr>" for r in rows)
+
+    tour = safe_path(p.get("tour_url"))
+    tour_btn = f'<a class="icon-button tour-button" href="{esc(tour)}">{ico("image")} مشاهدهٔ تور ۳۶۰</a>' if tour else ""
+    tour_aside = (f'<a class="btn btn-outline" href="{esc(tour)}">{ico("image")} بازدید ۳۶۰ درجه</a>') if tour else ""
     qr = "/qr.html?url=" + quote(f"{SITE}/p/{slug}", safe="")
-    msg = quote(f"سلام، برای {title} درخواست هماهنگی بازدید دارم.")
-    chips = "".join(f'<span class="feature-chip">{m}</span>' for m in meta)
+    msg = quote(f"سلام، برای {title} درخواست بازدید دارم")
+
     return (
         '<main id="main"><div class="wrap adak-dynamic-detail">'
         f'<nav class="breadcrumb"><a href="/">خانه</a> / <a href="/files/">فایل املاک</a> / {esc(title)}</nav>'
-        f'<header class="property-page-title"><div><h1>{esc(title)}</h1><div class="property-location">کرج · {esc(loc)}</div></div>'
-        f'<div class="property-actions">{tour_btn}<a class="icon-button" href="{esc(qr)}">دریافت QR</a><button class="icon-button" type="button" id="adak-share">اشتراک‌گذاری</button></div></header>'
-        f'<section class="adak-dynamic-gallery">{figs}</section>'
-        '<section class="property-info-layout"><article class="property-narrative">'
-        f'<h2>{esc(title)}</h2><p>{esc(summary)}</p><div class="feature-chips">{chips}</div>'
-        '<p class="privacy-hint">برای رعایت حریم خصوصی مالکان، نشانی دقیق، اطلاعات مالک و شرایط محرمانه معامله در این صفحه درج نشده است.</p></article>'
-        '<aside class="contact-card"><div class="aside-header"><img src="/assets/adaak-symbol-96.png" alt="آداک"><strong>مشاوران املاک آداک</strong></div>'
-        '<h3>درخواست بازدید</h3><p>برای هماهنگی بازدید و دریافت اطلاعات تکمیلی با دفتر آداک تماس بگیرید.</p>'
-        '<p class="card-hours"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#clock"/></svg>ساعت کاری: ۹ تا ۲۰</p>'
-        '<a class="btn btn-navy" href="tel:09126895443">تماس با ما</a>'
-        f'<a class="btn btn-gold" target="_blank" rel="noopener noreferrer" href="{WHATSAPP}?text={msg}">درخواست بازدید در واتساپ</a>'
-        "</aside></section></div></main>"
+        f'<div class="property-page-title"><div><h1>{esc(h1)}</h1>'
+        f'<div class="property-location">{ico("location")} کرج · {esc(loc)}</div></div>'
+        f'<div class="property-actions">{tour_btn}'
+        f'<button type="button" class="icon-button" id="share-btn">{ico("share")} اشتراک‌گذاری</button>'
+        f'<a href="{esc(qr)}" class="icon-button">{ico("qr")} دریافت QR</a></div></div>'
+        f'{mosaic}'
+        '<div class="property-info-layout"><article class="property-narrative">'
+        f'<h2>{esc(headline)}</h2>{body}'
+        f'<div class="feature-chips">{chips}</div>'
+        f'<h2>اطلاعات عمومی ملک</h2><table class="details-table"><tbody>{table}</tbody></table>'
+        f'<p class="privacy-hint">{ico("lock")} برای رعایت حریم خصوصی مالکان، نشانی دقیق، اطلاعات مالک '
+        'و جزئیات محرمانه فایل در سایت درج نشده است.</p></article>'
+        '<aside class="contact-card"><div class="aside-header"><img src="/assets/adaak-symbol-96.png" alt="">'
+        '<strong>مشاوران املاک آداک</strong></div>'
+        '<h3>درخواست بازدید اختصاصی</h3>'
+        '<p>برای هماهنگی بازدید و دریافت اطلاعات تکمیلی این فایل با ما تماس بگیرید.</p>'
+        f'<p class="card-hours">{ico("clock")}ساعت کاری: ۹ تا ۲۰</p>'
+        f'<a class="btn btn-navy" href="tel:09126895443">{ico("phone")}تماس با ما</a>'
+        f'<a class="btn btn-gold" target="_blank" rel="noopener noreferrer" href="{WHATSAPP}?text={msg}">'
+        f'{ico("message")} درخواست بازدید در واتساپ</a>{tour_aside}'
+        '<small>ارسال درخواست به معنی ثبت قطعی بازدید نیست؛ هماهنگی نهایی توسط دفتر انجام می‌شود.</small>'
+        '</aside></div></div>'
+        f'<section class="media-section" id="photos"><div class="wrap">'
+        f'<div class="section-top"><div><h2 class="section-heading">گالری تصاویر {esc(title)}</h2></div></div>'
+        f'<div class="media-info"><span>عکس‌های این فایل · {fa(len(imgs))} تصویر</span>'
+        '<span>برای بزرگ‌نمایی روی عکس بزنید</span></div>'
+        f'<div class="photo-grid" id="l-photo-grid">{grid}</div></div></section>'
+        '<section class="wrap print-row"><div><h3>این فایل را با یک اسکن مشاهده کنید</h3>'
+        '<p>کد QR همین صفحه را می‌توانید روی برگه‌های بازدید آداک چاپ کنید.</p></div>'
+        f'<a class="btn btn-outline" href="{esc(qr)}">{ico("qr")} صفحه چاپ QR</a></section>'
+        '</main>'
+        '<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="نمایش بزرگ تصاویر" aria-hidden="true">'
+        '<div class="lightbox-toolbar"><span id="lightbox-counter"></span>'
+        f'<button type="button" id="lightbox-close" class="icon-button">{ico("close")} بستن</button></div>'
+        '<div class="lightbox-stage"><button type="button" id="lightbox-prev" class="lightbox-arrow lightbox-prev" aria-label="تصویر قبل">‹</button>'
+        '<img id="lightbox-image" alt="تصویر بزرگ ملک">'
+        '<button type="button" id="lightbox-next" class="lightbox-arrow lightbox-next" aria-label="تصویر بعد">›</button></div>'
+        '<div id="lightbox-caption" class="lightbox-desc"></div></div>'
+        '<div class="share-toast" id="share-toast" role="status"></div>'
     )
 
 
@@ -519,6 +585,10 @@ def main():
                                               schemas=listing_schemas(p, slug)))
         page = re.sub(r"<main id=\"main\">.*?</main>", lambda _: render_listing_main(p, slug), page, count=1, flags=re.S)
         page = page.replace("<!DOCTYPE html>", "<!DOCTYPE html>" + GENERATED_MARK, 1)
+        if "/listing-gallery.js" not in page:
+            page = page.replace('<script src="/property-page.js" defer></script>',
+                                '<script src="/property-page.js" defer></script>'
+                                '<script src="/listing-gallery.js" defer></script>', 1)
         write(f"p/{slug}.html", page)
         wanted.add(f"{slug}.html")
     for name in os.listdir(os.path.join(ROOT, "p")):  # drop pages of unpublished/removed listings
