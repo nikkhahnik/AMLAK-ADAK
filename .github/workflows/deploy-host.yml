@@ -23,6 +23,9 @@ concurrency:
 jobs:
   deploy:
     name: ساخت و آپلود
+    # تا وقتی متغیر FTP_DIR در Settings → Variables ثبت نشده، این job اجرا نمی‌شود
+    # (یعنی تا قبل از آماده‌شدن هاست، اجراهای قرمزِ بی‌خودی نداریم)
+    if: ${{ vars.FTP_DIR != '' }}
     runs-on: ubuntu-latest
     steps:
       - name: دریافت کد
