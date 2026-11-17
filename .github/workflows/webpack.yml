@@ -25,3 +25,13 @@ jobs:
           test -d assets
           python3 -m json.tool properties.json >/dev/null
           echo "ADAAK static structure and property JSON validated"
+      - name: Build SEO pages and verify generated files
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/build_seo.py
+          if [ -n "$(git status --porcelain)" ]; then
+            git status --short
+            echo "SEO build output differs from committed files. Run python3 scripts/build_seo.py and commit its output."
+            exit 1
+          fi

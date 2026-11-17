@@ -1,8 +1,8 @@
 [build]
   publish = "."
   # Regenerates sitemap.xml, per-listing pages and SEO tags from properties.json.
-  # Never fails the deploy: on error the committed files are published as they are.
-  command = "python3 scripts/build_seo.py || true"
+  # A failed SEO build must stop the deploy instead of publishing stale pages.
+  command = "python3 scripts/build_seo.py"
 
 [build.environment]
   # This is a static HTML site, not a Next.js app. Prevent the Next.js Runtime

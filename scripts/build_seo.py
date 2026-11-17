@@ -846,5 +846,6 @@ def main():
 if __name__ == "__main__":
     try:
         main()
-    except Exception as exc:  # never break the deploy; committed files stay as they are
-        print(f"build_seo: skipped ({exc!r})", file=sys.stderr)
+    except Exception as exc:
+        print(f"build_seo: failed ({exc!r})", file=sys.stderr)
+        raise SystemExit(1) from exc
