@@ -31,6 +31,20 @@ ErrorDocument 404 /404.html
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
   Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests"
   Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  SetEnvIf Request_URI "^/darkhast-melk/" ADAK_DARKHAST_MELK=1
+  Header always set X-Content-Type-Options "nosniff" env=ADAK_DARKHAST_MELK
+  Header always set Referrer-Policy "strict-origin-when-cross-origin" env=ADAK_DARKHAST_MELK
+  Header always set X-Frame-Options "SAMEORIGIN" env=ADAK_DARKHAST_MELK
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()" env=ADAK_DARKHAST_MELK
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://amlakadak.ir; font-src 'self' https://fonts.gstatic.com; style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com; connect-src 'self' https://api.telegram.org; frame-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'; upgrade-insecure-requests" env=ADAK_DARKHAST_MELK
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=ADAK_DARKHAST_MELK
+  SetEnvIf Request_URI "^/sabt-file/" ADAK_SABT_FILE=1
+  Header always set X-Content-Type-Options "nosniff" env=ADAK_SABT_FILE
+  Header always set Referrer-Policy "strict-origin-when-cross-origin" env=ADAK_SABT_FILE
+  Header always set X-Frame-Options "SAMEORIGIN" env=ADAK_SABT_FILE
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()" env=ADAK_SABT_FILE
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://amlakadak.ir; font-src 'self' https://fonts.gstatic.com; style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com; connect-src 'self' https://api.telegram.org; frame-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'; upgrade-insecure-requests" env=ADAK_SABT_FILE
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=ADAK_SABT_FILE
   SetEnvIf Request_URI "^/assets/" ADAK_ASSETS=1
   Header always set Cache-Control "public, max-age=31536000, immutable" env=ADAK_ASSETS
   SetEnvIf Request_URI "^/admin/" ADAK_ADMIN=1
