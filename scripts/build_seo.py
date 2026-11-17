@@ -818,6 +818,8 @@ def main():
     # ---- sitemap ---------------------------------------------------------------
     urls = [("/", 1.0, "weekly", ["/assets/og-adak.jpg", "/assets/office/adak-office-interior.webp"]),
             ("/files/", 0.9, "weekly", []),
+            ("/darkhast-melk/", 0.9, "weekly", []),
+            ("/sabt-file/", 0.9, "weekly", []),
             ("/bazdid-360/", 0.9, "monthly", ["/assets/tour/150/living-360-thumb.jpg"]),
             ("/kharid-apartman-rajaei-shahr/", 0.9, "weekly", ["/assets/empty/08.webp"]),
             ("/forosh-melk-karaj/", 0.8, "monthly", ["/assets/office/adak-office-interior.webp"]),
