@@ -56,16 +56,6 @@ const hits = [];
 const WINDOW_MS = 60 * 1000, MAX_PER_WINDOW = 20;
 
 export default async (req) => {
-  // safe diagnostic: reports only whether env vars are *present* (never their values)
-  const url = new URL(req.url);
-  if (url.searchParams.get('diag') === '1') {
-    return json(200, {
-      ok: true,
-      hasToken: !!env('TELEGRAM_BOT_TOKEN'),
-      hasChat: !!env('TELEGRAM_CHAT_ID'),
-      runtime: globalThis.Netlify?.env ? 'netlify-env' : 'process-env',
-    });
-  }
   if (req.method !== 'POST') return json(405, { ok: false });
 
   let body;
