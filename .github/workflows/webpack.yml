@@ -10,18 +10,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify static site entry points and editable property catalogue
-        shell: bash
+      - name: Validate canonical URLs and public assets
+        run: python3 scripts/build_seo.py
+      - name: Check intake JavaScript
         run: |
-          set -euo pipefail
-          test -f index.html
-          test -f property.html
-          test -f privacy.html
-          test -f qr.html
-          test -f admin/index.html
-          test -f .pages.yml
-          test -f netlify.toml
-          test -f properties.json
-          test -d assets
-          python3 -m json.tool properties.json >/dev/null
-          echo "ADAAK static structure and property JSON validated"
+          node --check brand-intake.js
+          node --test tests/intake.test.mjs
+      - name: Check shared-host intake PHP
+        run: php -l api/submit/index.php
+      - name: Prepare exact offline preview
+        run: |
+          mkdir -p preview
+          cp -r assets bazdid-360 darkhast-melk sabt-file tour daftar-amlak-karaj kharid-apartman-rajaei-shahr forosh-melk-karaj rahnama-bazdid-apartman preview/
+          cp index.html privacy.html styles.css brand-refactor.css app.js theme.js home-header.js brand-intake.js preview/
+          printf '@echo off\r\ncd /d "%%~dp0"\r\nstart "" http://localhost:8080\r\npython -m http.server 8080 --bind 127.0.0.1\r\n' > preview/start-preview.bat
+          printf 'Run start-preview.bat with Python installed, or run python3 -m http.server 8080 --bind 127.0.0.1 inside this folder and open http://localhost:8080. Preview forms never send data.\n' > preview/README.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ADAK-exact-preview
+          path: preview/
+          retention-days: 14

@@ -71,6 +71,9 @@ ErrorDocument 410 /404.html
   RewriteRule ^p/adk-02(?:\.html|/)?$ /tour/ [R=301,L]
   RewriteRule ^(?:p/|property/|property\.html$|tour/adk-06(?:/|$)|qr\.html$|inventory\.html$) - [G,L]
   RewriteRule ^(darkhast-melk|sabt-file)/form\.html$ /$1/ [R=301,L]
+  # Private lead intake, POST JSON only
+  RewriteRule ^api/submit/?$ /api/submit/index.php [L,QSA]
+
   # admin API - PHP stands in for the Netlify Function
   # some hosts drop the Authorization header before PHP sees it
   RewriteRule ^api/admin/ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]

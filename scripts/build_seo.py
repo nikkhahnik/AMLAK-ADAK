@@ -28,6 +28,9 @@ def main():
             elif ref not in ['/api/submit'] and ref.startswith(('/p/','/files/','/tour/adk-06/')): raise RuntimeError((path,ref))
     urls=''.join('<url><loc>https://amlakadak.ir'+p+'</loc></url>\n' for p in PAGES)
     (ROOT/'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+urls+'</urlset>\n')
+    if os.environ.get('CONTEXT') in ('deploy-preview','branch-deploy'):
+        hp=ROOT/'_headers'; h=hp.read_text()
+        if 'X-Robots-Tag: noindex, nofollow, noarchive' not in h: hp.write_text(h.replace('/*\n','/*\n  X-Robots-Tag: noindex, nofollow, noarchive\n',1))
     if os.environ.get('NETLIFY'): (ROOT/'build-info.txt').write_text('brand-only '+datetime.now(timezone.utc).isoformat()+'\n')
     print(f'Validated {len(PAGES)} canonical pages; no public listings.')
 if __name__=='__main__': main()

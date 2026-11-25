@@ -59,8 +59,8 @@ export default async (req) => {
   if (req.method !== 'POST') return json(405, { ok: false });
 
   let body;
-  try { body = await req.json(); } catch { return json(400, { ok: false, error: 'bad request' }); }
-  if (!body || typeof body !== 'object') return json(400, { ok: false, error: 'bad request' });
+  try { const raw=await req.text(); if(raw.length>16000) return json(413,{ok:false,delivered:false}); body=JSON.parse(raw); } catch { return json(400, { ok: false, error: 'bad request' }); }
+  if (!body || typeof body !== 'object' || Array.isArray(body)) return json(400, { ok: false, error: 'bad request' });
 
   // bot traps: honeypot filled, or submitted implausibly fast
   if (body.company) return json(400, { ok: false, delivered: false });
@@ -77,7 +77,7 @@ export default async (req) => {
   const phone = toAscii(body.phone || '').replace(/[^\d]/g, '');
   if (!/^09\d{9}$/.test(phone)) return json(400, { ok: false, error: 'invalid phone' });
 
-  if (!['sabt','darkhast'].includes(body.kind) || body.consent !== 'yes' || !String(body.kind==='sabt'?body.name:body.family).trim() || !body.deal || !body.category) return json(400,{ok:false,delivered:false});
+  if (!['sabt','darkhast'].includes(body.kind) || body.consent !== 'yes' || !String((body.kind==='sabt'?body.name:body.family) || '').trim() || !body.deal || !body.category) return json(400,{ok:false,delivered:false});
   // collect allowlisted fields, capped
   const data = {};
   for (const [k, max] of Object.entries(FIELDS)) {
@@ -87,10 +87,11 @@ export default async (req) => {
     data[k] = v;
   }
 
+  data.phone=phone;
   const token = env('TELEGRAM_BOT_TOKEN');
   const chat = env('TELEGRAM_CHAT_ID');
   if (!token || !chat) {
-    // not configured yet — accept so the UX works, but report not-delivered server-side only
+    // Not configured: fail closed so the browser never reports a false success.
     console.warn('submit: telegram env missing');
     return json(503, { ok: false, delivered: false });
   }
