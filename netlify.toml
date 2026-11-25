@@ -1,27 +1,9 @@
 [build]
   publish = "."
-  # Regenerates sitemap.xml, per-listing pages and SEO tags from properties.json.
-  # Never fails the deploy: on error the committed files are published as they are.
-  command = "python3 scripts/build_seo.py || true"
-
+  command = "python3 scripts/build_seo.py"
 [build.environment]
-  # This is a static HTML site, not a Next.js app. Prevent the Next.js Runtime
-  # (installed automatically) from running and failing the build.
   NETLIFY_NEXT_PLUGIN_SKIP = "true"
-
-[[redirects]]
-  from = "/property/019"
-  to = "/p/adk-019"
-  status = 301
-
-[[redirects]]
-  from = "/property/boustan-19"
-  to = "/p/adk-019"
-  status = 301
-
-# Each published listing gets an explicit rule in _redirects (written by scripts/build_seo.py,
-# applied before this file; Netlify matches with or without a trailing slash). Anything else under /p/ is a real 404.
-[[redirects]]
-  from = "/p/*"
-  to = "/404.html"
-  status = 404
+[context.deploy-preview]
+  command = "python3 scripts/build_seo.py"
+[context.branch-deploy]
+  command = "python3 scripts/build_seo.py"
