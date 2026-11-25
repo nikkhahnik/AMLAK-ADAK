@@ -59,13 +59,13 @@ export default async (req) => {
   if (req.method !== 'POST') return json(405, { ok: false });
 
   let body;
-  try { body = await req.json(); } catch { return json(400, { ok: false, error: 'bad request' }); }
-  if (!body || typeof body !== 'object') return json(400, { ok: false, error: 'bad request' });
+  try { const raw=await req.text(); if(raw.length>16000) return json(413,{ok:false,delivered:false}); body=JSON.parse(raw); } catch { return json(400, { ok: false, error: 'bad request' }); }
+  if (!body || typeof body !== 'object' || Array.isArray(body)) return json(400, { ok: false, error: 'bad request' });
 
   // bot traps: honeypot filled, or submitted implausibly fast
-  if (body.company) return json(200, { ok: true });            // honeypot → pretend success
+  if (body.company) return json(400, { ok: false, delivered: false });
   const elapsed = Number(toAscii(body.elapsed)) || 0;
-  if (elapsed > 0 && elapsed < 2000) return json(200, { ok: true });
+  if (elapsed > 0 && elapsed < 2000) return json(400, { ok: false, delivered: false });
 
   // rate limit (per warm instance)
   const now = Date.now();
@@ -75,8 +75,9 @@ export default async (req) => {
 
   // phone is required and must look like an Iranian mobile
   const phone = toAscii(body.phone || '').replace(/[^\d]/g, '');
-  if (phone.length < 11 || !phone.startsWith('09')) return json(400, { ok: false, error: 'invalid phone' });
+  if (!/^09\d{9}$/.test(phone)) return json(400, { ok: false, error: 'invalid phone' });
 
+  if (!['sabt','darkhast'].includes(body.kind) || body.consent !== 'yes' || !String((body.kind==='sabt'?body.name:body.family) || '').trim() || !body.deal || !body.category) return json(400,{ok:false,delivered:false});
   // collect allowlisted fields, capped
   const data = {};
   for (const [k, max] of Object.entries(FIELDS)) {
@@ -86,12 +87,13 @@ export default async (req) => {
     data[k] = v;
   }
 
+  data.phone=phone;
   const token = env('TELEGRAM_BOT_TOKEN');
   const chat = env('TELEGRAM_CHAT_ID');
   if (!token || !chat) {
-    // not configured yet — accept so the UX works, but report not-delivered server-side only
+    // Not configured: fail closed so the browser never reports a false success.
     console.warn('submit: telegram env missing');
-    return json(200, { ok: true, delivered: false });
+    return json(503, { ok: false, delivered: false });
   }
 
   const text = buildMessage(data);
@@ -107,10 +109,10 @@ export default async (req) => {
     });
     clearTimeout(t);
     const out = await r.json().catch(() => ({}));
-    if (!out.ok) { console.warn('telegram api not ok'); return json(200, { ok: true, delivered: false }); }
+    if (!out.ok) { console.warn('telegram api not ok'); return json(503, { ok: false, delivered: false }); }
   } catch (e) {
     console.warn('telegram send failed'); // never leak details to client
-    return json(200, { ok: true, delivered: false });
+    return json(503, { ok: false, delivered: false });
   }
 
   return json(200, { ok: true, delivered: true });

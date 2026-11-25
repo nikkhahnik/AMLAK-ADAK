@@ -43,8 +43,8 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m json.tool properties.json > /dev/null
-          for f in index.html property.html privacy.html qr.html .htaccess \
-                   api/admin/index.php admin/index.html sitemap.xml robots.txt \
+          for f in index.html property.html privacy.html .htaccess \
+                   api/admin/index.php api/submit/index.php admin/index.html sitemap.xml robots.txt \
                    googlea1fc99ef7e650390.html; do
             test -s "$f" || { echo "فایل لازم پیدا نشد یا خالی است: $f"; exit 1; }
           done
@@ -79,3 +79,4 @@ jobs:
             **/*.sql
             .pages.yml
             api/admin/config.php
+            **/tests/**
